@@ -28,9 +28,17 @@ io.on("connection", (socket) => {
 
     socket.on("join", (data) => { //se une a una sala especifica
         socket.join(data);
+        console.log(`Se unio a la sala ${data}`);
     });
 
-});
+    socket.on("verificarSala", (data) => { //verifica si la sala existe
+        if(io.sockets.adapter.rooms.get(data)){
+            socket.emit("salaExiste", true);
+        }else{
+            socket.emit("salaExiste", false);
+        }
+    });
+}); 
 server.listen(3001, () => {
     console.log('listening on *:3001');
 });
