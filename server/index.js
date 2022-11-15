@@ -17,6 +17,7 @@ const io = new Server(server, {
     },
 });
 
+let partidasCreadas = [];
 io.on("connection", (socket) => {
     console.log(`Nuevo cliente conectado! ${socket.id}`);
 
@@ -38,6 +39,23 @@ io.on("connection", (socket) => {
             socket.emit("salaExiste", false);
         }
     });
+
+
+    socket.on("crearPartida", (data) => {
+        console.log("creando partida");
+        partidasCreadas.push(data);
+        console.log(partidasCreadas.length);
+        socket.broadcast.emit("partidaCreada", partidasCreadas);
+    });
+
+    socket.off("obtenerPartidas", () => { //obtiene las partidas disponibles    
+        console.log(partidasCreadas);
+    });
+    socket.on("obtenerPartidas", () => { //obtiene las partidas disponibles
+        console.log(partidasCreadas)
+        socket.emit("partidas", partidasCreadas);
+    });
+
 }); 
 server.listen(3001, () => {
     console.log('listening on *:3001');

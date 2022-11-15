@@ -1,19 +1,17 @@
+// clase partida server
 export default class Partida {
     constructor(codigo,modo,pista,vueltas,tiempo,cantJugadores){
         this.state = {
-            codigo: codigo, //string
-            modo: modo,//string
-            pista: pista,//string
-            vueltas: vueltas,//int
-            tiempo: tiempo,//int
-            cantJugadores: cantJugadores,//int
-            creador: null,//json
-            jugadores: [] //array de json
+            codigo: codigo,
+            modo: modo,
+            pista: pista,
+            vueltas: vueltas,
+            tiempo: tiempo,
+            cantJugadores: cantJugadores,
+            creador: null,
+            jugadores: []
         };
     }
-
-    
-
 
     getCreador(){
         return this.state.creador;
@@ -97,26 +95,10 @@ export default class Partida {
         }
     }
 
-    tojson(){
-        return JSON.stringify({
-            codigo: this.state.codigo,
-            modo: this.state.modo,
-            pista: this.state.pista,
-            vueltas: this.state.vueltas,
-            tiempo: this.state.tiempo,
-            cantJugadores: this.state.cantJugadores,
-            creador: this.state.creador,
-            jugadores: this.state.jugadores
-        });
-    }
-
-    fromJson(json){
-        this.state = json;
-    }
 
 
     toString(){
-        return "Creador: " + this.state.creador +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores;
+        return "Creador: " + this.state.creador.getNickName() +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores;
     }
 
 }

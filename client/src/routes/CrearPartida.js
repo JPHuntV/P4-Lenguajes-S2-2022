@@ -13,7 +13,7 @@ export default class CrearPartida extends Component{
             modo:"Vs",
             pista:"Pista 1",
             vueltas: 3,
-            tiempo: 30,
+            tiempo: 0,
             jugadores: 2
 
         };
@@ -52,7 +52,19 @@ export default class CrearPartida extends Component{
     CrearPartida = () => {
         console.log("estoy en CrearPartida");
         this.state.usuario.setTipo("Creador");
-        let partida = new Partida(this.state.sala,this.state.modo,this.state.pista,this.state.vueltas,this.state.tiempo,this.state.jugadores);
+        let partida;
+        partida = new Partida(this.state.sala,this.state.modo,this.state.pista,this.state.vueltas,this.state.tiempo,this.state.jugadores);
+        partida.setCreador(this.state.usuario.toJson());
+        partida.agregarJugador(this.state.usuario.toJson());
+
+        
+        let socket = this.state.usuario.getSocket();
+        console.log("voy a emitir crearPartida");
+        socket.emit("crearPartida",{partida:JSON.stringify(partida)});
+        /*socket.on("partidaCreada",(partida)=>{
+            console.log("partida creada");
+        });*/
+
         this.props.navigation.navigate("Lobby",{usuario: this.state.usuario, partida: partida});
     }
 
