@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
             socket.join(data.room);
             console.log(`Se unio a la sala ${data.room}`);
             io.emit("actualizarPartidas", partidasCreadas);
-            socket.to(data.room).emit("userJoined", data.usuario);
+            socket.to(data.room).emit("userJoined", getPartida(data.room));
             socket.emit("irLobby", getPartida(data.room));
         }else{
             console.log("no se unio a la sala");
@@ -116,6 +116,39 @@ io.on("connection", (socket) => {
         console.log(partidasCreadas)
         socket.emit("partidas", partidasCreadas);
     });
+
+
+    socket.on("disconnect", () => {
+        console.log(`Cliente desconectado! ${socket.id}`);
+        limpiarPartidas(socket.id);
+        io.emit("actualizarPartidas", partidasCreadas);
+
+    });
+
+    limpiarPartidas = (id) => {
+        console.log("limpiando partidas: " + id);
+        let partidas = [];
+        partidasCreadas.forEach((partidaC) => {
+            let partida = JSON.parse(partidaC.partida).state;
+            partida.jugadores.forEach((jugador) => {
+                if(jugador[1] === id){
+                    partida.jugadores.splice(partida.jugadores.indexOf(jugador), 1);
+                    partidaC.partida = JSON.stringify({state: partida});
+                    socket.to(partida.codigo).emit("userLeft", partidaC);
+
+                }
+                
+            });
+            partidas.push(partidaC);
+        });
+        partidasCreadas = partidas;
+        console.log(partidasCreadas);
+    }
+
+
+ 
+
+
 
 }); 
 server.listen(3001, () => {

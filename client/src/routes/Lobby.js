@@ -10,12 +10,33 @@ function Lobby(props) {
     const [ultimoJugador, setUltimoJugador] = useState(null);
     useEffect(() => {
         console.log("useEffect");
-        usuario.getSocket().on("userJoined", (data) => {
+        usuario.getSocket().on("userJoined", (partidaTemp) => {
             console.log("userJoin");
-            let partidaTemp = partida;
+         
+            let partidaObj = new Partida(partidaTemp.codigo, partidaTemp.modo, partidaTemp.pista, partidaTemp.vueltas, partidaTemp.tiempo, partidaTemp.cantJugadores);
+            partidaObj.setCreador(partidaTemp.creador);
+            partidaObj.setJugadores(partidaTemp.jugadores);
+            console.log(partidaObj);
+            setPartida(partidaObj);
+            setJugadores(partidaObj.getJugadores());
+
+            /* let partidaTemp = partida;
             partidaTemp.getJugadores().push(data);
             setPartida(partidaTemp);
-            setUltimoJugador(data);
+            setJugadores(partidaTemp.getJugadores());
+            setUltimoJugador(data);*/
+        });
+
+
+        usuario.getSocket().on("userLeft", (partida) => {
+            console.log("userLeft");
+            let partidaTemp = JSON.parse(partida.partida).state;
+            let partidaObj = new Partida(partidaTemp.codigo, partidaTemp.modo, partidaTemp.pista, partidaTemp.vueltas, partidaTemp.tiempo, partidaTemp.cantJugadores);
+            partidaObj.setCreador(partidaTemp.creador);
+            partidaObj.setJugadores(partidaTemp.jugadores);
+            console.log(partidaObj);
+            setPartida(partidaObj);
+            setJugadores(partidaObj.getJugadores());
         });
     }, []);
 
