@@ -60,12 +60,13 @@ export default class CrearPartida extends Component{
         
         let socket = this.state.usuario.getSocket();
         console.log("voy a emitir crearPartida");
-        socket.emit("crearPartida",{partida:JSON.stringify(partida)});
-        /*socket.on("partidaCreada",(partida)=>{
+        let nuevaPartida = JSON.stringify(partida);
+        socket.emit("crearPartida",{partida:nuevaPartida});
+        socket.on("partidaCreadaC",(partidaC)=>{
             console.log("partida creada");
-        });*/
+            this.props.navigation.navigate("Lobby",{usuario: this.state.usuario, partida: partida});
+        });
 
-        this.props.navigation.navigate("Lobby",{usuario: this.state.usuario, partida: partida});
     }
 
     render(){

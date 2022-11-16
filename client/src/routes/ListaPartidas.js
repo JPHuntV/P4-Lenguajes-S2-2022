@@ -14,10 +14,22 @@ function ListaPartidas(props){
             console.log("partidaCreadaa");
             setPartidas(partidas);
         });
+
+        usuario.getSocket().on("userJoined", (data) => {
+            console.log("userJoin");
+            console.log(data);
+        });
     }, []);
     
 
+    const joinRoom = (room) => {
+        console.log("joinRoom: "+room);
+        let socket = usuario.getSocket();
+        if (room !== '') {
+          socket.emit("join", {room: room, usuario: usuario.toJson()});
 
+        }
+    }
     const partidaFromJson = (json) => {
         let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
         partida.setCreador(json.creador);
@@ -34,7 +46,12 @@ function ListaPartidas(props){
             console.log(partida.getJugadores());
             
             itemsPartidas.push(
-                <Text key={partida.getCodigo()}>{partida.toString()}</Text>
+                <View key={partida.getCodigo()}>
+                    <Text>{partida.toString()}</Text>
+                    <TouchableOpacity onPress={()=> joinRoom(partida.getCodigo())}>
+                        <Text>Unirse</Text>
+                    </TouchableOpacity>
+                </View>
             );
         });
         return itemsPartidas;
@@ -44,7 +61,6 @@ function ListaPartidas(props){
         <View>
             <Text>Estoy en lista de partidas</Text>
             <Text>{usuario.getSocket().id }</Text>
-            <Text> {partidas.length}</Text>
             {getItemsPartidas()}
         </View>
     );

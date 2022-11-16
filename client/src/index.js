@@ -6,9 +6,9 @@ import reportWebVitals from './reportWebVitals';
 // npm install socket.io-client @react-navigation/native @react-navigation/stack react-native-screens react-native-safe-area-context
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App/> {/* llamada a la aplicación */}
-  </React.StrictMode>
+
+    <App/> 
+
 );
 
 // If you want to start measuring performance in your app, pass a function

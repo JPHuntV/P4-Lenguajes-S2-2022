@@ -5,6 +5,7 @@ const app = express();
 const http = require('http');
 const{Server} = require('socket.io');
 const cors = require('cors');
+const { json } = require('express');
 app.use(cors());
 
 const server = http.createServer(app);
@@ -28,8 +29,12 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join", (data) => { //se une a una sala especifica
-        socket.join(data);
-        console.log(`Se unio a la sala ${data}`);
+        console.log("data");
+        console.log(data);
+        socket.join(data.room);
+        console.log(`Se unio a la sala ${data.room}`);
+        socket.to(data.room).emit("userJoined", data.usuario);
+        //socket.emit("userJoined", data.usuario);
     });
 
     socket.on("verificarSala", (data) => { //verifica si la sala existe
@@ -44,7 +49,11 @@ io.on("connection", (socket) => {
     socket.on("crearPartida", (data) => {
         console.log("creando partida");
         partidasCreadas.push(data);
+        let partida = JSON.parse(data.partida).state;
         console.log(partidasCreadas.length);
+        console.log(partida);
+        socket.join(partida.codigo);
+        socket.emit("partidaCreadaC", partidasCreadas);
         socket.broadcast.emit("partidaCreada", partidasCreadas);
     });
 
