@@ -15,14 +15,29 @@ function ListaPartidas(props){
             setPartidas(partidas);
         });
 
-        usuario.getSocket().on("userJoined", (data) => {
+        usuario.getSocket().on("actualizarPartidas", (partidas) => {
             console.log("userJoin");
-            console.log(data);
+            setPartidas(partidas);
+        });
+        
+        usuario.getSocket().on("irLobby", (data) => {
+            console.log("ir al lobby");
+            let partidaTemp = partidaFromJson(data);
+            console.log(partidaTemp);
+            props.navigation.navigate("Lobby", {usuario: usuario, partida: partidaTemp});
+
+
+        });
+
+        usuario.getSocket().on("notJoined", (data) => {
+            console.log("notJoined");
+            alert("No se pudo unir a la partida");
         });
     }, []);
     
 
-    const joinRoom = (room) => {
+    const joinRoom = (partida) => {
+        let room = partida.getCodigo();
         console.log("joinRoom: "+room);
         let socket = usuario.getSocket();
         if (room !== '') {
@@ -48,7 +63,7 @@ function ListaPartidas(props){
             itemsPartidas.push(
                 <View key={partida.getCodigo()}>
                     <Text>{partida.toString()}</Text>
-                    <TouchableOpacity onPress={()=> joinRoom(partida.getCodigo())}>
+                    <TouchableOpacity onPress={()=> joinRoom(partida)}>
                         <Text>Unirse</Text>
                     </TouchableOpacity>
                 </View>

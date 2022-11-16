@@ -12,11 +12,10 @@ function Lobby(props) {
         console.log("useEffect");
         usuario.getSocket().on("userJoined", (data) => {
             console.log("userJoin");
-            let jugadoresTemp = jugadores;
-            jugadoresTemp.push(data);
-            setJugadores(jugadoresTemp);
+            let partidaTemp = partida;
+            partidaTemp.getJugadores().push(data);
+            setPartida(partidaTemp);
             setUltimoJugador(data);
-            console.log(jugadores);
         });
     }, []);
 
@@ -46,6 +45,13 @@ function Lobby(props) {
             {getItemsJugadores()}
             
             <Text>Cantidad de jugadores {jugadores.length}</Text>
+            {(usuario.getTipo() == "Creador") ?
+                <TouchableOpacity onPress={()=> usuario.getSocket().emit("startGame", partida.getCodigo())}>
+                    <Text>Empezar partida</Text>
+                </TouchableOpacity>
+                :null
+            }
+
             
         </View>
     );

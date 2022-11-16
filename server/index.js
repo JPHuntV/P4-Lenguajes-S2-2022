@@ -29,13 +29,65 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join", (data) => { //se une a una sala especifica
-        console.log("data");
+        console.log("server join");
         console.log(data);
-        socket.join(data.room);
-        console.log(`Se unio a la sala ${data.room}`);
-        socket.to(data.room).emit("userJoined", data.usuario);
-        //socket.emit("userJoined", data.usuario);
+        let valido= verificarSala(data);
+        if(valido){
+            socket.join(data.room);
+            console.log(`Se unio a la sala ${data.room}`);
+            io.emit("actualizarPartidas", partidasCreadas);
+            socket.to(data.room).emit("userJoined", data.usuario);
+            socket.emit("irLobby", getPartida(data.room));
+        }else{
+            console.log("no se unio a la sala");
+            socket.emit("notJoined", "false");
+        }
     });
+
+    getPartida = (codigo) => {
+        let partida = null;
+        partidasCreadas.forEach((partidaC) => {
+            let partidaJ = JSON.parse(partidaC.partida).state;
+            if(partidaJ.codigo === codigo){
+                partida = partidaJ;
+            }
+        });
+        return partida;
+    }
+
+
+    verificarSala = (data) => {
+        console.log("verificando sala");
+        
+        let valido = true;
+        partidasCreadas.forEach((partidaC) => {
+            let partida = JSON.parse(partidaC.partida).state;
+            console.log(partida.codigo);
+            if(partida.codigo === data.room){
+                let usuarioValido = true;
+                partida.jugadores.forEach((jugador) => {
+                    console.log(jugador[1]);
+                    console.log(data.usuario[1]);
+                    if(jugador[1] === data.usuario[1]){
+                        usuarioValido = false;
+                    }else{
+                        usuarioValido = true;
+                    }
+                });
+                if(usuarioValido){
+                    console.log("usuario valido");
+                    partida.jugadores.push(data.usuario);
+                    partidaC.partida = JSON.stringify({state: partida});
+                    valido = true;
+                }else{
+                    console.log("usuario no valido");
+                    valido = false;
+                }
+            }
+        });
+        return valido;
+    }
+
 
     socket.on("verificarSala", (data) => { //verifica si la sala existe
         if(io.sockets.adapter.rooms.get(data)){

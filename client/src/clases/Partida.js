@@ -116,7 +116,7 @@ export default class Partida {
 
 
     toString(){
-        return "Creador: " + this.state.creador +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores;
+        return "Creador: " + this.state.creador +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores+" jugadores conectados: "+this.state.jugadores.length;
     }
 
 }
