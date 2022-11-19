@@ -44,6 +44,25 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("cerrarLobby", (data) => {
+        console.log("cerrarLobby");
+        //cambiar estado de la partida a "cerrada"
+        partidasCreadas.forEach((partida, index) => {
+            console.log(partida);
+            console.log(index);
+            let partidaJson = JSON.parse(partida.partida).state;
+            if(partidaJson.codigo == data){
+                partidaJson.estado = "activa";
+                partida.partida = JSON.stringify({state: partidaJson});
+                partidasCreadas[index] = partida;
+            }
+
+        });
+        io.emit("actualizarPartidas", partidasCreadas);
+        io.to(data).emit("irPartida", getPartida(data));
+    });
+
+    
     getPartida = (codigo) => {
         let partida = null;
         partidasCreadas.forEach((partidaC) => {
@@ -63,7 +82,7 @@ io.on("connection", (socket) => {
         partidasCreadas.forEach((partidaC) => {
             let partida = JSON.parse(partidaC.partida).state;
             console.log(partida.codigo);
-            if(partida.codigo === data.room){
+            if(partida.codigo === data.room && partida.estado === "esperando"){
                 let usuarioValido = true;
                 partida.jugadores.forEach((jugador) => {
                     console.log(jugador[1]);
@@ -83,6 +102,8 @@ io.on("connection", (socket) => {
                     console.log("usuario no valido");
                     valido = false;
                 }
+            }else{
+                valido = false;
             }
         });
         return valido;
@@ -151,6 +172,7 @@ io.on("connection", (socket) => {
 
 
 }); 
+
 server.listen(3001, () => {
     console.log('listening on *:3001');
 });

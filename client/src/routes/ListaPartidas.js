@@ -18,6 +18,8 @@ function ListaPartidas(props){
         usuario.getSocket().on("actualizarPartidas", (partidas) => {
             console.log("userJoin");
             setPartidas(partidas);
+            console.log(partidas);
+            console.log("//////////////////");
         });
         
         usuario.getSocket().on("irLobby", (data) => {
@@ -49,6 +51,7 @@ function ListaPartidas(props){
         let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
         partida.setCreador(json.creador);
         partida.setJugadores(json.jugadores);
+        partida.setEstado(json.estado);
         return partida;
     }
     
@@ -59,15 +62,16 @@ function ListaPartidas(props){
             let partidaJson = JSON.parse(partidaTemp.partida).state
             let partida = partidaFromJson(partidaJson);
             console.log(partida.getJugadores());
-            
-            itemsPartidas.push(
-                <View key={partida.getCodigo()}>
-                    <Text>{partida.toString()}</Text>
-                    <TouchableOpacity onPress={()=> joinRoom(partida)}>
-                        <Text>Unirse</Text>
-                    </TouchableOpacity>
-                </View>
-            );
+            if(partida.getEstado() == "esperando"){
+                itemsPartidas.push(
+                    <View key={partida.getCodigo()}>
+                        <Text>{partida.toString()}</Text>
+                        <TouchableOpacity onPress={()=> joinRoom(partida)}>
+                            <Text>Unirse</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            }
         });
         return itemsPartidas;
     }

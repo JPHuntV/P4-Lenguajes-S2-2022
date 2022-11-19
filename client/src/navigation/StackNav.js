@@ -6,7 +6,7 @@ import CrearPartida from '../routes/CrearPartida';
 import io from 'socket.io-client';
 import Lobby from '../routes/Lobby';
 import ListaPartidas from '../routes/ListaPartidas';
-
+import Juego from '../routes/Juego';
 const socket = io.connect('http://localhost:3001');
 
 
@@ -23,6 +23,7 @@ export default class StackNav extends Component{
                 <Stack.Screen name="CrearPartida" component={CrearPartida} />
                 <Stack.Screen name="Lobby" component={Lobby} />
                 <Stack.Screen name="ListaPartidas" component={ListaPartidas} />
+                <Stack.Screen name='Juego' component={Juego} />
             </Stack.Navigator>
         );
     }

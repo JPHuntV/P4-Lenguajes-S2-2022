@@ -38,6 +38,11 @@ function Lobby(props) {
             setPartida(partidaObj);
             setJugadores(partidaObj.getJugadores());
         });
+        
+        usuario.getSocket().on("irPartida", (data) => {
+            console.log("irPartida");
+            props.navigation.navigate("Juego", {usuario: usuario, partida: partida});
+        });
     }, []);
 
 
@@ -59,6 +64,12 @@ function Lobby(props) {
     }
 
  
+    const iniciarPartida = () => {
+        usuario.getSocket().emit("cerrarLobby", partida.getCodigo());
+        console.log(partida);
+        //props.navigation.navigate("Juego", {usuario: usuario, partida: partida});
+    }
+
     return(
         <View>
             <Text>Estoy en lobby</Text>
@@ -67,7 +78,7 @@ function Lobby(props) {
             
             <Text>Cantidad de jugadores {jugadores.length}</Text>
             {(usuario.getTipo() == "Creador") ?
-                <TouchableOpacity onPress={()=> usuario.getSocket().emit("startGame", partida.getCodigo())}>
+                <TouchableOpacity onPress={()=> iniciarPartida()}>
                     <Text>Empezar partida</Text>
                 </TouchableOpacity>
                 :null

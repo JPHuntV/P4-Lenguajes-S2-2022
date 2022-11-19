@@ -8,12 +8,19 @@ export default class Partida {
             tiempo: tiempo,//int
             cantJugadores: cantJugadores,//int
             creador: null,//json
-            jugadores: [] //array de json
+            jugadores: [], //array de json
+            estado: "esperando" //string
         };
     }
 
     
+    getEstado(){
+        return this.state.estado;
+    }
 
+    setEstado(estado){
+        this.state.estado = estado;
+    }
 
     getCreador(){
         return this.state.creador;
@@ -116,7 +123,7 @@ export default class Partida {
 
 
     toString(){
-        return "Creador: " + this.state.creador +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores+" jugadores conectados: "+this.state.jugadores.length;
+        return "Creador: " + this.state.creador +  " Sala: "+this.state.codigo + " Modo: "+this.state.modo+" Pista: "+this.state.pista+" Vueltas: "+this.state.vueltas+" Tiempo: "+this.state.tiempo+" Jugadores: "+this.state.cantJugadores+" jugadores conectados: "+this.state.jugadores.length + " Estado: "+this.state.estado;
     }
 
 }
