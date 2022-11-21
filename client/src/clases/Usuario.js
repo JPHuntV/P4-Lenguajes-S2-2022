@@ -3,8 +3,19 @@ export default class Usuario {
         this.state = {
             socket: socket,
             nickName: nickName,
-            tipo: "usuario"
+            tipo: "usuario",
+            ficha:{
+                color: "red",
+                posicion: {
+                    x: 0,
+                    y: 0
+                }
+            }
         };
+    }
+
+    setPosicion(posicion){
+        this.state.ficha.posicion = posicion;
     }
 
     getSocket(){
@@ -38,7 +49,8 @@ export default class Usuario {
     toJson(){
         return [this.state.nickName,
                 this.state.socket.id,
-                this.state.tipo];
+                this.state.tipo,
+                this.state.ficha];
 
     }
 

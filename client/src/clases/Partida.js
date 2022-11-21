@@ -9,11 +9,20 @@ export default class Partida {
             cantJugadores: cantJugadores,//int
             creador: null,//json
             jugadores: [], //array de json
-            estado: "esperando" //string
+            estado: "esperando", //string
+            tablero: null
         };
     }
 
+    getTablero(){
+        return this.state.tablero;
+    }
+
+    setTablero(tablero){
+        this.state.tablero = tablero;
+    }
     
+
     getEstado(){
         return this.state.estado;
     }

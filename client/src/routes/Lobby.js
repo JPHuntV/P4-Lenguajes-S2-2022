@@ -41,10 +41,35 @@ function Lobby(props) {
         
         usuario.getSocket().on("irPartida", (data) => {
             console.log("irPartida");
-            props.navigation.navigate("Juego", {usuario: usuario, partida: partida});
+
+            console.log("partida");
+            
+            let partidaTemp = JSON.parse(data.partida).state;
+            let partidaObj = new Partida(partidaTemp.codigo, partidaTemp.modo, partidaTemp.pista, partidaTemp.vueltas, partidaTemp.tiempo, partidaTemp.cantJugadores);
+            partidaObj.setCreador(partidaTemp.creador);
+            partidaObj.setJugadores(partidaTemp.jugadores);
+            partidaObj.setTablero(partidaTemp.tablero);
+            console.log(partidaObj.getTablero());
+            props.navigation.navigate("Juego", {usuario: usuario, partida: partidaObj});
         });
     }, []);
 
+    const pista = require('../pistas/pista1.csv');
+    const getMatrixTablero = () => {
+        let matriz=[];
+        fetch(pista)
+        .then(response => response.text())
+        .then(text => {
+            let lista = text.split("\r\n");
+            lista.pop();
+            lista.forEach(fila => {
+                let filaMatriz = fila.split(",");
+                matriz.push(filaMatriz);
+            });
+        })
+        .catch(error => console.log(error));
+        return matriz;
+    }
 
 
 

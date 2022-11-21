@@ -56,17 +56,35 @@ export default class CrearPartida extends Component{
         partida = new Partida(this.state.sala,this.state.modo,this.state.pista,this.state.vueltas,this.state.tiempo,this.state.jugadores);
         partida.setCreador(this.state.usuario.toJson());
         partida.agregarJugador(this.state.usuario.toJson());
-
+        partida.setTablero(this.getMatrixTablero());
         
         let socket = this.state.usuario.getSocket();
         console.log("voy a emitir crearPartida");
         let nuevaPartida = JSON.stringify(partida);
+        console.log(partida.getTablero());
         socket.emit("crearPartida",{partida:nuevaPartida});
         socket.on("partidaCreadaC",(partidaC)=>{
             console.log("partida creada");
+            
             this.props.navigation.navigate("Lobby",{usuario: this.state.usuario, partida: partida});
         });
 
+    }
+    getMatrixTablero = () => {
+        let pista = require('../pistas/pista1.csv');
+        let matriz=[];
+        fetch(pista)
+        .then(response => response.text())
+        .then(text => {
+            let lista = text.split("\r\n");
+            lista.pop();
+            lista.forEach(fila => {
+                let filaMatriz = fila.split(",");
+                matriz.push(filaMatriz);
+            });
+        })
+        .catch(error => console.log(error));
+        return matriz;
     }
 
     render(){

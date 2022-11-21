@@ -44,6 +44,51 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("iniciarJuego", (data) => {
+        console.log("iniciarJuego");
+        console.log(data);
+        ubicarJugadores(data);
+        socket.to(data.state.codigo).emit("iniciarJuego", data);
+    });
+
+
+    ubicarJugadores = (data) => {
+        //ubicar jugadores en tablero
+
+        let partida = data.state;
+        let jugadores = partida.jugadores;
+        let tablero = partida.tablero;
+        let contador = 0;
+        for(let i = 0; i < tablero.length; i++){
+            for(let j = 0; j < tablero[i].length; j++){
+                if(tablero[i][j] === "3" && contador < jugadores.length){
+                    tablero[i][j] = jugadores[contador];
+                    io.to(jugadores[contador][1]).emit("ubicarJugador", {x: i, y: j});
+                    contador++;
+                }
+            }
+        }
+        partida.tablero = tablero;
+        partida.jugadores = jugadores;  
+        //cambiar elemento de partida en partidasCreadas
+        for(let i = 0; i < partidasCreadas.length; i++){
+            if(partidasCreadas[i].codigo === partida.codigo){
+                partidasCreadas[i] = partida;
+            }
+        }
+
+        console.log(partidasCreadas);
+        //actualizarPartida(partida);
+    }
+
+    actualizarPartida = (partida) => {
+        for(let i = 0; i < partidasCreadas.length; i++){
+            if(partidasCreadas[i].room === partida.room){
+                partidasCreadas[i] = partida;
+            }
+        }
+    }
+
     socket.on("cerrarLobby", (data) => {
         console.log("cerrarLobby");
         //cambiar estado de la partida a "cerrada"
@@ -55,11 +100,11 @@ io.on("connection", (socket) => {
                 partidaJson.estado = "activa";
                 partida.partida = JSON.stringify({state: partidaJson});
                 partidasCreadas[index] = partida;
+                io.emit("actualizarPartidas", partidasCreadas);
+                io.to(data).emit("irPartida", partida);
             }
 
         });
-        io.emit("actualizarPartidas", partidasCreadas);
-        io.to(data).emit("irPartida", getPartida(data));
     });
 
     
