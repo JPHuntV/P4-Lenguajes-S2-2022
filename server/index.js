@@ -63,7 +63,9 @@ io.on("connection", (socket) => {
             for(let j = 0; j < tablero[i].length; j++){
                 if(tablero[i][j] === "3" && contador < jugadores.length){
                     tablero[i][j] = jugadores[contador];
-                    io.to(jugadores[contador][1]).emit("ubicarJugador", {x: i, y: j});
+                    jugadores[contador].posicion = {x: i, y: j};
+                    console.log(jugadores[contador]);
+                    //io.to(jugadores[contador][1]).emit("ubicarJugador", {x: i, y: j});
                     contador++;
                 }
             }
@@ -72,22 +74,18 @@ io.on("connection", (socket) => {
         partida.jugadores = jugadores;  
         //cambiar elemento de partida en partidasCreadas
         for(let i = 0; i < partidasCreadas.length; i++){
-            if(partidasCreadas[i].codigo === partida.codigo){
-                partidasCreadas[i] = partida;
+            let partidaTemp = JSON.parse(partidasCreadas[i].partida).state;
+            console.log(partidaTemp);
+            if(partidaTemp.codigo === partida.codigo){
+                partidasCreadas[i].partida = JSON.stringify({state: partida});
+                io.to(partida.codigo).emit("actualizarPartida", partida);
             }
         }
 
         console.log(partidasCreadas);
-        //actualizarPartida(partida);
     }
 
-    actualizarPartida = (partida) => {
-        for(let i = 0; i < partidasCreadas.length; i++){
-            if(partidasCreadas[i].room === partida.room){
-                partidasCreadas[i] = partida;
-            }
-        }
-    }
+
 
     socket.on("cerrarLobby", (data) => {
         console.log("cerrarLobby");
@@ -198,6 +196,12 @@ io.on("connection", (socket) => {
             let partida = JSON.parse(partidaC.partida).state;
             partida.jugadores.forEach((jugador) => {
                 if(jugador[1] === id){
+                    if(jugador[2] ==="Creador" && partida.jugadores.length > 1){
+                        partida.creador = partida.jugadores[1];
+                        partida.jugadores[1][2] = "Creador";
+                        io.to(partida.jugadores[1][1]).emit("actualizarTipo", "Creador");
+                    }
+
                     partida.jugadores.splice(partida.jugadores.indexOf(jugador), 1);
                     partidaC.partida = JSON.stringify({state: partida});
                     socket.to(partida.codigo).emit("userLeft", partidaC);
@@ -205,7 +209,9 @@ io.on("connection", (socket) => {
                 }
                 
             });
-            partidas.push(partidaC);
+            if(partida.jugadores.length > 0){
+                partidas.push(partidaC);
+            }
         });
         partidasCreadas = partidas;
         console.log(partidasCreadas);

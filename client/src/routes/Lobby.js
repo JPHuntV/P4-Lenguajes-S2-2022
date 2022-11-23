@@ -27,6 +27,11 @@ function Lobby(props) {
             setUltimoJugador(data);*/
         });
 
+        usuario.getSocket().on("actualizarTipo", (tipo) => {
+            console.log("actualizarTipo");
+            usuario.setTipo(tipo);
+            setUsuario(usuario);
+        });
 
         usuario.getSocket().on("userLeft", (partida) => {
             console.log("userLeft");
@@ -48,7 +53,7 @@ function Lobby(props) {
             let partidaObj = new Partida(partidaTemp.codigo, partidaTemp.modo, partidaTemp.pista, partidaTemp.vueltas, partidaTemp.tiempo, partidaTemp.cantJugadores);
             partidaObj.setCreador(partidaTemp.creador);
             partidaObj.setJugadores(partidaTemp.jugadores);
-            partidaObj.setTablero(partidaTemp.tablero);
+            partidaObj.setTablero(getMatrixTablero());
             console.log(partidaObj.getTablero());
             props.navigation.navigate("Juego", {usuario: usuario, partida: partidaObj});
         });

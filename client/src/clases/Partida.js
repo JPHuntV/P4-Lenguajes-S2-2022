@@ -10,7 +10,7 @@ export default class Partida {
             creador: null,//json
             jugadores: [], //array de json
             estado: "esperando", //string
-            tablero: null
+            tablero: []
         };
     }
 

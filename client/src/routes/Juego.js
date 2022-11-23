@@ -29,14 +29,14 @@ function Juego(props){
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
-    const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
-    const [matriz, setMatriz] = useState(getMatrixTablero());
+    //const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
+    //const [matriz, setMatriz] = useState(getMatrixTablero());
     const [forsarRender, setForsarRender] = useState(false);
     const [tablero, setTablero] = useState(null);
 
     useEffect(() => {
         console.log("useEffectjuego");
-        console.log(matriz);
+        console.log(partida.getTablero());
         
         function handleKeyDown(event) {
             if (event.key === 'ArrowUp') {
@@ -47,11 +47,11 @@ function Juego(props){
                 console.log('left');
             } else if (event.key === 'ArrowRight') {
                 console.log('right');
-            } else if (event.key === 'u' || event.key === 'U') {
+            } else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
                 console.log('u');
-                console.log(matriz);
-                setTablero(generarTablero());
-                partida.setTablero(matriz);
+                //console.log(matriz);
+                //setTablero(generarTablero());
+                //partida.setTablero(getMatrixTablero());
                 usuario.getSocket().emit("iniciarJuego", partida);
             }
         }
@@ -66,10 +66,23 @@ function Juego(props){
         usuario.getSocket().on("ubicarJugador", (data) => {
             console.log("ubicarJugador");
             console.log(data);
-            usuario.setPosicion(data);
+            let usuarioTemp = usuario;
+            usuarioTemp.setPosicion(data);
+            setUsuario(usuarioTemp);
 
         });
         
+        usuario.getSocket().on("actualizarPartida", (data) => {
+            console.log("actualizarPartida");
+            console.log(data);
+            let nuevaPartida = partidaFromJson(data);
+            console.log(nuevaPartida);
+            setPartida(nuevaPartida);
+            //setJugadores(partida.getJugadores());
+            //setMatriz(nuevaPartida.getTablero());
+            //setTablero(generarTablero());
+        });
+
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
@@ -77,10 +90,19 @@ function Juego(props){
 
 
 
+    const partidaFromJson = (json) => {
+        let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
+        partida.setCreador(json.creador);
+        partida.setJugadores(json.jugadores);
+        partida.setEstado(json.estado);
+        partida.setTablero(json.tablero);
+        return partida;
+    }
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
-        console.log(jugadores);
+        //console.log(jugadores);
+        let jugadores = partida.getJugadores();
         let itemsJugadores = [];
         jugadores.forEach(jugador => {
             itemsJugadores.push(
@@ -99,6 +121,7 @@ function Juego(props){
     
     function generarTablero(){
         console.log("generarTablero");
+        let matriz = partida.getTablero();
         console.log(matriz);
         let tablero = [];
         let i = 0;
@@ -106,6 +129,7 @@ function Juego(props){
         matriz.forEach(fila => {
             let filaTablero = [];
             fila.forEach(celda => {
+                console.log(celda);
                 //definir estilo de celda
                 let colorCelda = "white";
                 if(celda === "1"){
@@ -116,6 +140,10 @@ function Juego(props){
                     colorCelda = "blue";
                 }else if(celda === "x"){
                     colorCelda = "black";
+                }else if(typeof celda === "object"){
+                    console.log("es un objeto");
+                    console.log(celda);
+                    celda = celda[0];
                 }
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]}>
@@ -124,6 +152,7 @@ function Juego(props){
                 );
                 j++;
             });
+            console.log("salgo del for");
             tablero.push(
                 <View key={i} style={styles.fila}>
                     {filaTablero}
@@ -143,7 +172,7 @@ function Juego(props){
             <Text>Estoy en iniciarPartida</Text>
             <Text>Jugadores</Text>
             {getItemsJugadores()}
-            <Text>Cantidad de jugadores {jugadores.length}</Text>
+            <Text>Cantidad de jugadores {partida.getJugadores().length}</Text>
             {(usuario.getTipo() == "Creador") ?
                 <TouchableOpacity >
                     <Text>Esperando admin</Text>
@@ -151,7 +180,7 @@ function Juego(props){
                 :null
             }
             <View style={styles.tablero}>
-                {matriz.length > 0 ? tablero : console.log("matriz vacia")}
+                {partida.getTablero().length > 0 ? generarTablero() : console.log("matriz vacia")}
                 
             </View>
             <Text>Tablero</Text>
