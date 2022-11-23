@@ -10,7 +10,8 @@ export default class Partida {
             creador: null,//json
             jugadores: [], //array de json
             estado: "esperando", //string
-            tablero: []
+            tablero: [],
+            matriz: []
         };
     }
 
@@ -22,6 +23,14 @@ export default class Partida {
         this.state.tablero = tablero;
     }
     
+
+    setMatriz(matriz){
+        this.state.matriz = matriz;
+    }
+
+    getMatriz(){
+        return this.state.matriz;
+    }
 
     getEstado(){
         return this.state.estado;

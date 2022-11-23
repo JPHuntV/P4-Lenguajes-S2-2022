@@ -41,12 +41,16 @@ function Juego(props){
         function handleKeyDown(event) {
             if (event.key === 'ArrowUp') {
                 console.log('up');
+                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "w"});
             } else if (event.key === 'ArrowDown') {
                 console.log('down');
+                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "s"});
             } else if (event.key === 'ArrowLeft') {
                 console.log('left');
+                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "a"});
             } else if (event.key === 'ArrowRight') {
                 console.log('right');
+                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "d"});
             } else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
                 console.log('u');
                 //console.log(matriz);
@@ -96,6 +100,7 @@ function Juego(props){
         partida.setJugadores(json.jugadores);
         partida.setEstado(json.estado);
         partida.setTablero(json.tablero);
+        partida.setMatriz(json.matriz);
         return partida;
     }
 

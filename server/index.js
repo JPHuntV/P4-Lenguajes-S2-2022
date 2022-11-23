@@ -62,8 +62,9 @@ io.on("connection", (socket) => {
         for(let i = 0; i < tablero.length; i++){
             for(let j = 0; j < tablero[i].length; j++){
                 if(tablero[i][j] === "3" && contador < jugadores.length){
+                    console.log("jugador: "+jugadores[contador][3]);
                     tablero[i][j] = jugadores[contador];
-                    jugadores[contador].posicion = {x: i, y: j};
+                    jugadores[contador][3].posicion = {x: i, y: j};
                     console.log(jugadores[contador]);
                     //io.to(jugadores[contador][1]).emit("ubicarJugador", {x: i, y: j});
                     contador++;
@@ -72,7 +73,24 @@ io.on("connection", (socket) => {
         }
         partida.tablero = tablero;
         partida.jugadores = jugadores;  
+        
+        actualizarPartida(partida);
         //cambiar elemento de partida en partidasCreadas
+       /* for(let i = 0; i < partidasCreadas.length; i++){
+            let partidaTemp = JSON.parse(partidasCreadas[i].partida).state;
+            console.log(partidaTemp);
+            if(partidaTemp.codigo === partida.codigo){
+                partidasCreadas[i].partida = JSON.stringify({state: partida});
+                io.to(partida.codigo).emit("actualizarPartida", partida);
+            }
+        }*/
+
+        console.log(partidasCreadas);
+    }
+
+
+    actualizarPartida = (partida) => {
+        //actualizar partida en partidasCreadas
         for(let i = 0; i < partidasCreadas.length; i++){
             let partidaTemp = JSON.parse(partidasCreadas[i].partida).state;
             console.log(partidaTemp);
@@ -81,9 +99,39 @@ io.on("connection", (socket) => {
                 io.to(partida.codigo).emit("actualizarPartida", partida);
             }
         }
-
-        console.log(partidasCreadas);
     }
+
+    socket.on("mover", (data) => {
+        console.log("mover");
+        let direcciones ={"w": {x: -1, y: 0}, "s": {x: 1, y: 0}, "a": {x: 0, y: -1}, "d": {x: 0, y: 1}};
+        console.log("[user]", socket.id, "[partida]", data.partida, "[direccion]", data.direccion);
+        let partida = getPartida(data.partida);
+        console.log(partida);
+        let tablero = partida.tablero;
+        let jugadores = partida.jugadores;
+        jugadores.forEach((jugador) => {
+            if(jugador[1] === socket.id){
+                let x = jugador[3].posicion.x;
+                let y = jugador[3].posicion.y;
+                let direccion = direcciones[data.direccion];
+                let x2 = x + direccion.x;
+                let y2 = y + direccion.y;
+                console.log("siguiente: ",tablero[x2][y2]);
+                if(["1", "2", "3"].includes(tablero[x2][y2]) ){
+                    console.log("se puede mover");
+                    tablero[x][y] = partida.matriz[x][y];
+                    tablero[x2][y2] = jugador;
+                    jugador[3].posicion = {x: x2, y: y2};
+                    partida.tablero = tablero;
+                    partida.jugadores = jugadores;
+                    actualizarPartida(partida);
+                }
+            }
+        });
+        console.log(partida);
+      
+
+    });
 
 
 

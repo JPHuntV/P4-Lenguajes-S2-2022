@@ -54,6 +54,7 @@ function Lobby(props) {
             partidaObj.setCreador(partidaTemp.creador);
             partidaObj.setJugadores(partidaTemp.jugadores);
             partidaObj.setTablero(getMatrixTablero());
+            partidaObj.setMatriz(partidaObj.getTablero());
             console.log(partidaObj.getTablero());
             props.navigation.navigate("Juego", {usuario: usuario, partida: partidaObj});
         });
