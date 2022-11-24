@@ -6,6 +6,8 @@ export default class Usuario {
             tipo: "usuario",
             ficha:{
                 color: "red",
+                vueltasCompletas: -1,
+                sentido:true,
                 posicion: {
                     x: 0,
                     y: 0

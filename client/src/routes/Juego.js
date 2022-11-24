@@ -33,12 +33,15 @@ function Juego(props){
     //const [matriz, setMatriz] = useState(getMatrixTablero());
     const [forsarRender, setForsarRender] = useState(false);
     const [tablero, setTablero] = useState(null);
+    const [sentidoCorrecto, setSentido] = useState(true);
 
     useEffect(() => {
         console.log("useEffectjuego");
         console.log(partida.getTablero());
         
         function handleKeyDown(event) {
+            if(event.repeat) return;
+            
             if (event.key === 'ArrowUp') {
                 console.log('up');
                 usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "w"});
@@ -60,6 +63,7 @@ function Juego(props){
             }
         }
         document.addEventListener("keydown", handleKeyDown);
+
         //render tablero cuando se carga la pagina
 
         usuario.getSocket().on("iniciarJuego", (data) => {
@@ -87,6 +91,19 @@ function Juego(props){
             //setTablero(generarTablero());
         });
 
+        usuario.getSocket().on("actualizarSentido", (data) => {
+            console.log("sentido");
+            console.log(data);
+            setSentido(data);
+        });
+
+
+
+        usuario.getSocket().on("ganador", (data) => {
+            console.log("ganador");
+            console.log(data);
+            alert("Ganador: " + data[0]);
+        });
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
@@ -127,23 +144,23 @@ function Juego(props){
     function generarTablero(){
         console.log("generarTablero");
         let matriz = partida.getTablero();
-        console.log(matriz);
+        //console.log(matriz);
         let tablero = [];
         let i = 0;
         let j = 0;
         matriz.forEach(fila => {
             let filaTablero = [];
             fila.forEach(celda => {
-                console.log(celda);
+                //console.log(celda);
                 //definir estilo de celda
                 let colorCelda = "white";
-                if(celda === "1"){
+                if(celda[0] === "1"){
                     colorCelda = "green";
-                }else if(celda === "2"){
+                }else if(celda[0] === "2"){
                     colorCelda = "purple";
-                }else if(celda === "3"){
+                }else if(celda[0] === "3"){
                     colorCelda = "blue";
-                }else if(celda === "x"){
+                }else if(celda[0] === "x"){
                     colorCelda = "black";
                 }else if(typeof celda === "object"){
                     console.log("es un objeto");
@@ -157,7 +174,7 @@ function Juego(props){
                 );
                 j++;
             });
-            console.log("salgo del for");
+            //console.log("salgo del for");
             tablero.push(
                 <View key={i} style={styles.fila}>
                     {filaTablero}
@@ -179,10 +196,12 @@ function Juego(props){
             {getItemsJugadores()}
             <Text>Cantidad de jugadores {partida.getJugadores().length}</Text>
             {(usuario.getTipo() == "Creador") ?
-                <TouchableOpacity >
-                    <Text>Esperando admin</Text>
-                </TouchableOpacity>
+                <Text>Esperando admin</Text>
                 :null
+            }
+            {sentidoCorrecto ?
+                <Text>Sentido correcto</Text>
+                :<Text>Sentido incorrecto</Text>
             }
             <View style={styles.tablero}>
                 {partida.getTablero().length > 0 ? generarTablero() : console.log("matriz vacia")}

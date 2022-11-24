@@ -61,7 +61,7 @@ io.on("connection", (socket) => {
         let contador = 0;
         for(let i = 0; i < tablero.length; i++){
             for(let j = 0; j < tablero[i].length; j++){
-                if(tablero[i][j] === "3" && contador < jugadores.length){
+                if(tablero[i][j][0] === "3" && contador < jugadores.length){
                     console.log("jugador: "+jugadores[contador][3]);
                     tablero[i][j] = jugadores[contador];
                     jugadores[contador][3].posicion = {x: i, y: j};
@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
         //actualizar partida en partidasCreadas
         for(let i = 0; i < partidasCreadas.length; i++){
             let partidaTemp = JSON.parse(partidasCreadas[i].partida).state;
-            console.log(partidaTemp);
+            //console.log(partidaTemp);
             if(partidaTemp.codigo === partida.codigo){
                 partidasCreadas[i].partida = JSON.stringify({state: partida});
                 io.to(partida.codigo).emit("actualizarPartida", partida);
@@ -116,19 +116,50 @@ io.on("connection", (socket) => {
                 let direccion = direcciones[data.direccion];
                 let x2 = x + direccion.x;
                 let y2 = y + direccion.y;
-                console.log("siguiente: ",tablero[x2][y2]);
-                if(["1", "2", "3"].includes(tablero[x2][y2]) ){
+                console.log("siguiente: ",tablero[x2][y2], "tipo: ", typeof(tablero[x2][y2]));
+                if(typeof(tablero[x2][y2]) === "object"){
+                    console.log("jugador");
+                    x2 = x2 + direccion.x;
+                    y2 = y2 + direccion.y;
+                }
+                if(["1", "2", "3"].includes(tablero[x2][y2][0]) ){
                     console.log("se puede mover");
                     tablero[x][y] = partida.matriz[x][y];
                     tablero[x2][y2] = jugador;
                     jugador[3].posicion = {x: x2, y: y2};
                     partida.tablero = tablero;
+
+                    let tail = partida.matriz[x2][y2].slice(1);
+                    let sentidoCorrecto = tail.includes(data.direccion);
+                 
+                    socket.emit("actualizarSentido", sentidoCorrecto);
+                    if(partida.matriz[x2][y2][0] === "2" && data.direccion === partida.matriz[x2][y2][1]){
+                        console.log("vuelta completa");
+                        jugador[3].vueltasCompletas++;
+                        jugador[3].sentido = true;
+                        console.log(jugador[3].vueltasCompletas);
+                    }
+                    else if(partida.matriz[x2][y2][0] === "3" && partida.matriz[x][y][0] === "2"){
+                        console.log("meta reversa");
+                        if(jugador[3].sentido){
+                            jugador[3].vueltasCompletas--;
+                            jugador[3].sentido = false;
+                        }
+                        console.log(jugador[3].vueltasCompletas);
+                    }
                     partida.jugadores = jugadores;
                     actualizarPartida(partida);
+                    tablero[x2][y2] = jugador;
+                
+                    console.log(partida.vueltas)
+                    if(jugador[3].vueltasCompletas === partida.vueltas){
+                        console.log("ganador");
+                        io.to(partida.codigo).emit("ganador", jugador);
+                    }
                 }
             }
         });
-        console.log(partida);
+        //console.log(partida);
       
 
     });
