@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
         }
         partida.tablero = tablero;
         partida.jugadores = jugadores;  
-        
+        partida.estado = "activa";
         actualizarPartida(partida);
         //cambiar elemento de partida en partidasCreadas
        /* for(let i = 0; i < partidasCreadas.length; i++){
@@ -148,14 +148,24 @@ io.on("connection", (socket) => {
                         console.log(jugador[3].vueltasCompletas);
                     }
                     partida.jugadores = jugadores;
-                    actualizarPartida(partida);
                     tablero[x2][y2] = jugador;
-                
+                    
                     console.log(partida.vueltas)
-                    if(jugador[3].vueltasCompletas === partida.vueltas){
-                        console.log("ganador");
-                        io.to(partida.codigo).emit("ganador", jugador);
+                    //if(jugador[3].vueltasCompletas === partida.vueltas){
+                    if(jugador[3].vueltasCompletas === 1){
+                        console.log("vueltas completas");
+                        partida.posiciones.push(jugador);
+                        console.log(partida.posiciones);
+                        //remover jugador del tablero
+                        //tablero[x2][y2] = partida.matriz[x2][y2];
                     }
+                    actualizarPartida(partida);
+
+
+
+                        /*console.log("ganador");
+                        io.to(partida.codigo).emit("ganador", jugador);*/
+                
                 }
             }
         });
@@ -204,7 +214,7 @@ io.on("connection", (socket) => {
         partidasCreadas.forEach((partidaC) => {
             let partida = JSON.parse(partidaC.partida).state;
             console.log(partida.codigo);
-            if(partida.codigo === data.room && partida.estado === "esperando"){
+            if(partida.codigo === data.room && partida.estado === "esperando" && partida.jugadores.length < partida.cantJugadores){
                 let usuarioValido = true;
                 partida.jugadores.forEach((jugador) => {
                     console.log(jugador[1]);
@@ -250,6 +260,18 @@ io.on("connection", (socket) => {
         socket.join(partida.codigo);
         socket.emit("partidaCreadaC", partidasCreadas);
         socket.broadcast.emit("partidaCreada", partidasCreadas);
+    });
+
+    socket.on("eliminarPartida", (data) => {
+        console.log("eliminando partida");
+        partidasCreadas.forEach((partida, index) => {
+            let partidaJson = JSON.parse(partida.partida).state;
+            if(partidaJson.codigo === data){
+                partidasCreadas.splice(index, 1);
+                io.emit("actualizarPartidas", partidasCreadas);
+                io.to(data).emit("partidaEliminada", partida);
+            }
+        });
     });
 
     socket.off("obtenerPartidas", () => { //obtiene las partidas disponibles    

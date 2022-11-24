@@ -29,44 +29,46 @@ function Juego(props){
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
-    //const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
-    //const [matriz, setMatriz] = useState(getMatrixTablero());
     const [forsarRender, setForsarRender] = useState(false);
     const [tablero, setTablero] = useState(null);
     const [sentidoCorrecto, setSentido] = useState(true);
+    const [tiempo, setTiempo] = useState(5);
+    const [counter, setCounter] = useState(null);
 
+    const Temp = 1000;
     useEffect(() => {
         console.log("useEffectjuego");
-        console.log(partida.getTablero());
+        console.log(partida.getEstado());
         
         function handleKeyDown(event) {
             if(event.repeat) return;
-            
-            if (event.key === 'ArrowUp') {
-                console.log('up');
-                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "w"});
-            } else if (event.key === 'ArrowDown') {
-                console.log('down');
-                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "s"});
-            } else if (event.key === 'ArrowLeft') {
-                console.log('left');
-                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "a"});
-            } else if (event.key === 'ArrowRight') {
-                console.log('right');
-                usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: "d"});
-            } else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
+            if((event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight") && partida.getEstado() === "activa"){
+                console.log(usuario.getFicha().vueltasCompletas);
+                if(1 >  usuario.getFicha().vueltasCompletas){
+                    console.log(event.key);
+                    let direcciones = {"ArrowUp":"w", "ArrowDown":"s", "ArrowLeft":"a", "ArrowRight":"d"};
+                    usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: direcciones[event.key]});
+                }
+            }else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
                 console.log('u');
-                //console.log(matriz);
-                //setTablero(generarTablero());
-                //partida.setTablero(getMatrixTablero());
+                partida.setEstado("activa");
+
                 usuario.getSocket().emit("iniciarJuego", partida);
             }
         }
+        const interval = setInterval(() => {
+            console.log("interval");
+            setForsarRender(!forsarRender);
+            clearInterval(interval);
+        },10);
+        
+
         document.addEventListener("keydown", handleKeyDown);
 
         //render tablero cuando se carga la pagina
 
         usuario.getSocket().on("iniciarJuego", (data) => {
+            partida.setEstado("activa");
             console.log("iniciarJuego");
             setTablero(generarTablero());
         });
@@ -106,6 +108,7 @@ function Juego(props){
         });
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
+            //clearInterval(interval);
         };
     }, []);
 
@@ -143,7 +146,7 @@ function Juego(props){
     
     function generarTablero(){
         console.log("generarTablero");
-        let matriz = partida.getTablero();
+        let matriz = partida.getMatriz();
         //console.log(matriz);
         let tablero = [];
         let i = 0;
@@ -167,9 +170,21 @@ function Juego(props){
                     console.log(celda);
                     celda = celda[0];
                 }
+                let colorFicha = "white";
+       
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]}>
-                        <Text>{celda}</Text>
+                        
+                        {typeof(partida.getTablero()[i][j]) === "object" ?
+                            <Text style={{color:colorFicha}}>
+                                {partida.getTablero()[i][j][0]}
+                            </Text>
+                            :
+                            <Text>{celda}</Text>
+                        }
+                        
+
+                               
                     </TouchableOpacity>
                 );
                 j++;
@@ -203,8 +218,13 @@ function Juego(props){
                 <Text>Sentido correcto</Text>
                 :<Text>Sentido incorrecto</Text>
             }
+            <Text>{tiempo}</Text>
             <View style={styles.tablero}>
-                {partida.getTablero().length > 0 ? generarTablero() : console.log("matriz vacia")}
+                {generarTablero()}
+                
+                {//partida.getTablero().length > 0 ? generarTablero() : console.log("matriz vacia")
+                }
+            
                 
             </View>
             <Text>Tablero</Text>

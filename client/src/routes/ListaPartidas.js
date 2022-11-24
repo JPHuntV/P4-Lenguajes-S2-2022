@@ -62,7 +62,7 @@ function ListaPartidas(props){
             let partidaJson = JSON.parse(partidaTemp.partida).state
             let partida = partidaFromJson(partidaJson);
             console.log(partida.getJugadores());
-            if(partida.getEstado() == "esperando"){
+            if(partida.getEstado() == "esperando" && partida.getJugadores().length < partida.getCantJugadores()){
                 itemsPartidas.push(
                     <View key={partida.getCodigo()}>
                         <Text>{partida.toString()}</Text>

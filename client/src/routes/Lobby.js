@@ -8,6 +8,7 @@ function Lobby(props) {
     const [partida, setPartida] = useState(props.route.params.partida);
     const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
     const [ultimoJugador, setUltimoJugador] = useState(null);
+    const temporizadorLobby = 10000;
     useEffect(() => {
         console.log("useEffect");
         usuario.getSocket().on("userJoined", (partidaTemp) => {
@@ -26,6 +27,12 @@ function Lobby(props) {
             setJugadores(partidaTemp.getJugadores());
             setUltimoJugador(data);*/
         });
+
+        const interval = setInterval(() => {
+            console.log("intervalss");
+            clearInterval(interval);
+            usuario.getSocket().emit("eliminarPartida", partida.getCodigo());
+        },temporizadorLobby);
 
         usuario.getSocket().on("actualizarTipo", (tipo) => {
             console.log("actualizarTipo");
@@ -56,8 +63,20 @@ function Lobby(props) {
             partidaObj.setTablero(getMatrixTablero());
             partidaObj.setMatriz(partidaObj.getTablero());
             console.log(partidaObj.getTablero());
+            clearInterval(interval);
             props.navigation.navigate("Juego", {usuario: usuario, partida: partidaObj});
         });
+
+        usuario.getSocket().on("partidaEliminada", (data) => {
+            console.log("partidaEliminada");
+            let usuarioTemp = usuario;
+            usuarioTemp.resetUsuario();
+            props.navigation.navigate("PantallaSeleccion", {usuario: usuarioTemp});
+        });
+
+        return () => {
+            clearInterval(interval);
+        }
     }, []);
 
     const pista = require('../pistas/pista1.csv');

@@ -16,6 +16,23 @@ export default class Usuario {
         };
     }
 
+    resetUsuario(){
+        this.state.tipo = "usuario";
+        this.state.ficha = {
+            color: "red",
+            vueltasCompletas: -1,
+            sentido:true,
+            posicion: {
+                x: 0,
+                y: 0
+            }
+        };
+    }
+
+
+    getFicha(){
+        return this.state.ficha;
+    }
     setPosicion(posicion){
         this.state.ficha.posicion = posicion;
     }

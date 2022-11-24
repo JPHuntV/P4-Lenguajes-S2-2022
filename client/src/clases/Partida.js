@@ -9,11 +9,21 @@ export default class Partida {
             cantJugadores: cantJugadores,//int
             creador: null,//json
             jugadores: [], //array de json
+            posiciones: [], //array de json
             estado: "esperando", //string
             tablero: [],
             matriz: []
         };
     }
+
+    getPosiciones(){
+        return this.state.posiciones;
+    }
+
+    setPosiciones(posiciones){
+        this.state.posiciones = posiciones;
+    }
+
 
     getTablero(){
         return this.state.tablero;

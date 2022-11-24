@@ -25,6 +25,7 @@ export default class PantallaSeleccion extends Component{
 
     
     render(){
+        console.log("usuario: " + this.state.usuario);
         return(
             <View>
                 <Text>{this.props.route.params.usuario.toString()}</Text>
