@@ -88,9 +88,14 @@ function Juego(props){
             let nuevaPartida = partidaFromJson(data);
             console.log(nuevaPartida);
             setPartida(nuevaPartida);
-            //setJugadores(partida.getJugadores());
-            //setMatriz(nuevaPartida.getTablero());
-            //setTablero(generarTablero());
+        });
+
+        usuario.getSocket().on("actualizarJugador", (data) => {
+            console.log("actualizarJugador");
+            console.log(data);
+            let usuarioTemp = usuario;
+            usuarioTemp.setFicha(data[3]);
+            setUsuario(usuarioTemp);
         });
 
         usuario.getSocket().on("actualizarSentido", (data) => {
@@ -123,7 +128,7 @@ function Juego(props){
         partida.setMatriz(json.matriz);
         return partida;
     }
-
+/*
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
         //console.log(jugadores);
@@ -138,9 +143,23 @@ function Juego(props){
             );
         });
         return itemsJugadores;
-    }
+    }*/
 
-    
+    const getItemsJugadores = () => {
+        console.log("getItemsJugadores");
+        console.log(partida.getJugadores());
+        let itemsJugadores = [];
+        partida.getJugadores().forEach(jugador => {
+            itemsJugadores.push(
+                <View key={jugador[1]} style={styles.tarjetaJugador}>
+                    <Text>{"nombre: " + jugador[0] + "  socket: " + jugador[1] + "  color: " + jugador[3].color  }</Text>
+                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 20, height: 20, borderRadius: 50}}></TouchableOpacity>
+                </View>
+
+            );
+        });
+        return itemsJugadores;
+    }
    
 
     
@@ -173,12 +192,12 @@ function Juego(props){
                 let colorFicha = "white";
        
                 filaTablero.push(
-                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]}>
+                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>
                         
                         {typeof(partida.getTablero()[i][j]) === "object" ?
-                            <Text style={{color:colorFicha}}>
-                                {partida.getTablero()[i][j][0]}
-                            </Text>
+                            <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color}]}>
+                                <Text>{partida.getTablero()[i][j][0]}</Text>
+                            </TouchableOpacity>
                             :
                             <Text>{celda}</Text>
                         }
@@ -272,12 +291,12 @@ const styles = StyleSheet.create({
     celdaFicha: {
         borderWidth: 1,
         borderColor: "black",
-        width: 35,
-        height: 35,
+        width: 25,
+        height: 25,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "yellow",
-        borderRadius: 50,
+        //backgroundColor: usuario.getFicha().color,
+        borderRadius: 10,
     },
 
 

@@ -6,6 +6,7 @@ const http = require('http');
 const{Server} = require('socket.io');
 const cors = require('cors');
 const { json } = require('express');
+const { Console } = require('console');
 app.use(cors());
 
 const server = http.createServer(app);
@@ -51,6 +52,21 @@ io.on("connection", (socket) => {
         socket.to(data.state.codigo).emit("iniciarJuego", data);
     });
 
+    socket.on("cambiarColor", (data) => {
+        console.log("cambiarColor");
+        console.log(data);
+        let partida = getPartida(data.codigo);
+        console.log(partida);
+        let jugadores = partida.jugadores;
+        for(let i=0; i<jugadores.length; i++){
+            if(jugadores[i][1] == socket.id){
+                jugadores[i][3].color = data.color;
+            }
+        }
+        partida.jugadores = jugadores;
+        actualizarPartida(partida);
+        console.log(partida.jugadores);
+    });
 
     ubicarJugadores = (data) => {
         //ubicar jugadores en tablero
@@ -159,6 +175,7 @@ io.on("connection", (socket) => {
                         //remover jugador del tablero
                         //tablero[x2][y2] = partida.matriz[x2][y2];
                     }
+                    socket.emit("actualizarJugador", jugador);
                     actualizarPartida(partida);
 
 

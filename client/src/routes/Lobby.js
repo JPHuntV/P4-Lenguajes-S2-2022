@@ -6,9 +6,9 @@ function Lobby(props) {
 
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
-    const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
+    //const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
     const [ultimoJugador, setUltimoJugador] = useState(null);
-    const temporizadorLobby = 10000;
+    const temporizadorLobby = 100000;
     useEffect(() => {
         console.log("useEffect");
         usuario.getSocket().on("userJoined", (partidaTemp) => {
@@ -19,7 +19,6 @@ function Lobby(props) {
             partidaObj.setJugadores(partidaTemp.jugadores);
             console.log(partidaObj);
             setPartida(partidaObj);
-            setJugadores(partidaObj.getJugadores());
 
             /* let partidaTemp = partida;
             partidaTemp.getJugadores().push(data);
@@ -48,7 +47,6 @@ function Lobby(props) {
             partidaObj.setJugadores(partidaTemp.jugadores);
             console.log(partidaObj);
             setPartida(partidaObj);
-            setJugadores(partidaObj.getJugadores());
         });
         
         usuario.getSocket().on("irPartida", (data) => {
@@ -67,6 +65,17 @@ function Lobby(props) {
             props.navigation.navigate("Juego", {usuario: usuario, partida: partidaObj});
         });
 
+
+
+        usuario.getSocket().on("actualizarPartida", (data) => {
+            console.log("actualizarPartida");
+            console.log(data);
+            let nuevaPartida = partidaFromJson(data);
+            console.log(nuevaPartida);
+            setPartida(nuevaPartida);
+        });
+
+
         usuario.getSocket().on("partidaEliminada", (data) => {
             console.log("partidaEliminada");
             let usuarioTemp = usuario;
@@ -78,6 +87,18 @@ function Lobby(props) {
             clearInterval(interval);
         }
     }, []);
+
+
+    const partidaFromJson = (json) => {
+        let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
+        partida.setCreador(json.creador);
+        partida.setJugadores(json.jugadores);
+        partida.setEstado(json.estado);
+        partida.setTablero(json.tablero);
+        partida.setMatriz(json.matriz);
+        return partida;
+    }
+
 
     const pista = require('../pistas/pista1.csv');
     const getMatrixTablero = () => {
@@ -100,12 +121,13 @@ function Lobby(props) {
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
-        console.log(jugadores);
+        console.log(partida.getJugadores());
         let itemsJugadores = [];
-        jugadores.forEach(jugador => {
+        partida.getJugadores().forEach(jugador => {
             itemsJugadores.push(
-                <View key={jugador[1]}>
-                    <Text>{jugador.toString()}</Text>
+                <View key={jugador[1]} style={styles.tarjetaJugador}>
+                    <Text>{"nombre: " + jugador[0] + "  socket: " + jugador[1] + "  color: " + jugador[3].color  }</Text>
+                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 20, height: 20, borderRadius: 50}}></TouchableOpacity>
                 </View>
 
             );
@@ -115,10 +137,44 @@ function Lobby(props) {
 
  
     const iniciarPartida = () => {
+       
+        
         usuario.getSocket().emit("cerrarLobby", partida.getCodigo());
         console.log(partida);
         //props.navigation.navigate("Juego", {usuario: usuario, partida: partida});
     }
+
+    const cambiarColor = (color) => {
+        usuario.getSocket().emit("cambiarColor", {codigo: partida.getCodigo(), color: color});
+    }
+
+
+    const getSelectorColores = () => {
+        const colores = ["#9a1b5b", "#3e1379", "#0a5f42", "#511111", "#115151", 
+                "#96e637", "#9a0000", "#a3b899", "#65cca9", "#ff461f", "#a25670", 
+                "#f0b57b", "#03e5ce", "#4c70da", "#6171b7", "#006666", "#800000", "#8a2be2"];
+       let itemsColores = [];
+        colores.forEach(color => {
+            itemsColores.push(
+                //disable si el color ya fue elegido
+                
+
+                <TouchableOpacity key={color} style={[styles.colorCard,{backgroundColor:color}]} onPress={() => cambiarColor(color)} disabled={colorElegido(color)}></TouchableOpacity>
+            );
+        });
+        return itemsColores;
+    }
+
+    const colorElegido = (color) => {
+        let elegido = false;
+        partida.getJugadores().forEach(jugador => {
+            if(jugador[3].color == color){
+                elegido = true;
+            }
+        });
+        return elegido;
+    }
+
 
     return(
         <View>
@@ -126,7 +182,7 @@ function Lobby(props) {
             <Text>Jugadores</Text>
             {getItemsJugadores()}
             
-            <Text>Cantidad de jugadores {jugadores.length}</Text>
+            <Text>Cantidad de jugadores {partida.getJugadores().length}</Text>
             {(usuario.getTipo() == "Creador") ?
                 <TouchableOpacity onPress={()=> iniciarPartida()}>
                     <Text>Empezar partida</Text>
@@ -134,44 +190,44 @@ function Lobby(props) {
                 :null
             }
 
+            <View style={styles.selectorColores}>
+                {/*seleccionar color*/}
+                {getSelectorColores()}    
+            </View>
+
             
         </View>
     );
 }
 
 export default Lobby;
-/*
 
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    colorCard: {
+        width: 50,
+        height: 70,
+        borderRadius: 15,
+        margin: 10,
+    },
+    tarjetaJugador: {
+        backgroundColor: "white",
+        alignContent: "center",
+        flexDirection: "row",
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            usuario: props.route.params.usuario,
-            partida: props.route.params.partida
-        };
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+    },
+    selectorColores: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
     }
-
-
-    render(){
-        let itemsJugadores = [];
-        this.state.partida.getJugadores().forEach(jugador => {
-            itemsJugadores.push(
-                <View key={jugador}>
-                    <Text>{jugador}</Text>
-                </View>
-            );
-        });
-
-        return(
-            <View>
-                <Text>Estoy en lobby</Text>
-                <Text>{this.state.partida.toString() }</Text>
-                <Text>Jugadores</Text>
-                {itemsJugadores}
-                <Text>Cantidad de jugadores {this.state.partida.getCantidadJugadores() }</Text>
-                
-            </View>
-        );
-    }
-}*/
+});

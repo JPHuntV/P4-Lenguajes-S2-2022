@@ -30,9 +30,23 @@ export default class Usuario {
     }
 
 
+    getColor(){
+        return this.state.ficha.color;
+    }
+
+    setColor(color){
+        this.state.ficha.color = color;
+    }
+    
+
     getFicha(){
         return this.state.ficha;
     }
+
+    setFicha(ficha){
+        this.state.ficha = ficha;
+    }
+
     setPosicion(posicion){
         this.state.ficha.posicion = posicion;
     }
