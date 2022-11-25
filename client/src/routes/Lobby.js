@@ -7,7 +7,7 @@ function Lobby(props) {
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
     //const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
-    const [ultimoJugador, setUltimoJugador] = useState(null);
+    //const [ultimoJugador, setUltimoJugador] = useState(null);
     const temporizadorLobby = 100000;
     useEffect(() => {
         console.log("useEffect");

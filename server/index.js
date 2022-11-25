@@ -168,7 +168,7 @@ io.on("connection", (socket) => {
                     
                     console.log(partida.vueltas)
                     //if(jugador[3].vueltasCompletas === partida.vueltas){
-                    if(jugador[3].vueltasCompletas === 1){
+                    if(jugador[3].vueltasCompletas === 0){
                         console.log("vueltas completas");
                         partida.posiciones.push(jugador);
                         console.log(partida.posiciones);

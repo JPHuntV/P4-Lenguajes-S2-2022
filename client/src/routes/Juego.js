@@ -44,7 +44,7 @@ function Juego(props){
             if(event.repeat) return;
             if((event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight") && partida.getEstado() === "activa"){
                 console.log(usuario.getFicha().vueltasCompletas);
-                if(1 >  usuario.getFicha().vueltasCompletas){
+                if(0 >  usuario.getFicha().vueltasCompletas){
                     console.log(event.key);
                     let direcciones = {"ArrowUp":"w", "ArrowDown":"s", "ArrowLeft":"a", "ArrowRight":"d"};
                     usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: direcciones[event.key]});
@@ -109,8 +109,12 @@ function Juego(props){
         usuario.getSocket().on("finalizarPartida", (data) => {
             console.log("finalizarPartida");
             console.log(data);
+            let nuevaPartida = partidaFromJson(data);
+            console.log(nuevaPartida);
+
+
             alert("La partida ha finalizado");
-            props.navigation.navigate("Inicio");
+            props.navigation.navigate("Estadisticas", {usuario: usuario, partida: nuevaPartida});
         });
 
 
@@ -131,6 +135,7 @@ function Juego(props){
         partida.setEstado(json.estado);
         partida.setTablero(json.tablero);
         partida.setMatriz(json.matriz);
+        partida.setPosiciones(json.posiciones);
         return partida;
     }
 /*
@@ -171,15 +176,12 @@ function Juego(props){
     function generarTablero(){
         console.log("generarTablero");
         let matriz = partida.getMatriz();
-        //console.log(matriz);
         let tablero = [];
         let i = 0;
         let j = 0;
         matriz.forEach(fila => {
             let filaTablero = [];
             fila.forEach(celda => {
-                //console.log(celda);
-                //definir estilo de celda
                 let colorCelda = "white";
                 if(celda[0] === "1"){
                     colorCelda = "green";
@@ -194,26 +196,19 @@ function Juego(props){
                     console.log(celda);
                     celda = celda[0];
                 }
-                let colorFicha = "white";
-       
                 filaTablero.push(
-                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>
-                        
+                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
                         {typeof(partida.getTablero()[i][j]) === "object" ?
                             <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color}]}>
                                 <Text>{partida.getTablero()[i][j][0]}</Text>
                             </TouchableOpacity>
                             :
                             <Text>{celda}</Text>
-                        }
-                        
-
-                               
+                        }      
                     </TouchableOpacity>
                 );
                 j++;
             });
-            //console.log("salgo del for");
             tablero.push(
                 <View key={i} style={styles.fila}>
                     {filaTablero}

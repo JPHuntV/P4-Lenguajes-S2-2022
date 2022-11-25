@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import Lobby from '../routes/Lobby';
 import ListaPartidas from '../routes/ListaPartidas';
 import Juego from '../routes/Juego';
+import Estadisticas from '../routes/Estadisticas';
 const socket = io.connect('http://localhost:3001');
 
 
@@ -24,6 +25,7 @@ export default class StackNav extends Component{
                 <Stack.Screen name="Lobby" component={Lobby} />
                 <Stack.Screen name="ListaPartidas" component={ListaPartidas} />
                 <Stack.Screen name='Juego' component={Juego} />
+                <Stack.Screen name='Estadisticas' component={Estadisticas} />
             </Stack.Navigator>
         );
     }
