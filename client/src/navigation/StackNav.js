@@ -8,6 +8,7 @@ import Lobby from '../routes/Lobby';
 import ListaPartidas from '../routes/ListaPartidas';
 import Juego from '../routes/Juego';
 import Estadisticas from '../routes/Estadisticas';
+import Ranking from '../routes/Ranking';
 const socket = io.connect('http://localhost:3001');
 //const socket = io.connect('http://152.231.203.141:8080');
 
@@ -29,6 +30,8 @@ export default class StackNav extends Component{
                 <Stack.Screen name="ListaPartidas" component={ListaPartidas} />
                 <Stack.Screen name='Juego' component={Juego} />
                 <Stack.Screen name='Estadisticas' component={Estadisticas} />
+                <Stack.Screen name='Ranking' component={Ranking} />
+
             </Stack.Navigator>
         );
     }

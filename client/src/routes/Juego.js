@@ -114,6 +114,7 @@ function Juego(props){
 
 
             alert("La partida ha finalizado");
+            //usuario.getSocket().emit("guardarPartidaRanking",{partida: data, usuario: JSON.stringify(usuario)});
             props.navigation.navigate("Estadisticas", {usuario: usuario, partida: nuevaPartida});
         });
 

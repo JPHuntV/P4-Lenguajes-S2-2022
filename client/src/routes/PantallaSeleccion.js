@@ -29,7 +29,7 @@ export default class PantallaSeleccion extends Component{
         return(
             <View>
                 <Text>{this.props.route.params.usuario.toString()}</Text>
-                <TouchableOpacity onPress={()=>{this.props.navigation.navigate("CrearPartida",{usuario:this.state.usuario });console.log("si")} }> 
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("CrearPartida",{usuario:this.state.usuario }) }> 
                     <Text>Crear partida</Text>
                 </TouchableOpacity>
 
@@ -39,7 +39,7 @@ export default class PantallaSeleccion extends Component{
                 <TouchableOpacity onPress={()=> this.irAPartida()}> 
                     <Text>Unirser a partida</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>console.log("ranking")}> 
+                <TouchableOpacity onPress={()=> this.props.navigation.navigate("Ranking",{usuario:this.state.usuario})}> 
                     <Text>Ver ranking </Text>
                 </TouchableOpacity>
             </View>

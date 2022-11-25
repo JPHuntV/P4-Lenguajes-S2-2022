@@ -7,6 +7,8 @@ const{Server} = require('socket.io');
 const cors = require('cors');
 app.use(cors());
 
+const fs = require('fs');
+
 const server = http.createServer(app);
 
 
@@ -181,6 +183,7 @@ io.on("connection", (socket) => {
                     if(partida.posiciones.length === partida.jugadores.length){
                         partida.estado = "finalizada";
                         console.log("partida finalizada");
+                        guardarPartidaRanking(partida);
                         io.to(partida.codigo).emit("finalizarPartida", partida);
                     }
 
@@ -340,10 +343,50 @@ io.on("connection", (socket) => {
         });
         partidasCreadas = partidas;
         console.log(partidasCreadas);
+
     }
+
+    guardarPartidaRanking = (partida) => {
+        console.log("guardando partida");
+        console.log(partida);
+        //let partida = data.state;
+        //let partida = JSON.parse(data.partida).state;
+        //escribir en archivo txt
+        let nuevaEntrada = partida.posiciones[0][0] +","+ (partida.modo ==="Vs" ? "----":partida.tiempo) + "," + partida.pista+","+partida.posiciones[0][3].vueltasCompletas+","+partida.codigo;
+        fs.appendFile('./archivos/ranking.txt', nuevaEntrada + "\n", function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    }
+
+    socket.on("obtenerRanking", () => {
+        console.log("obteniendo ranking");
+        fs.readFile('./archivos/ranking.txt', 'utf8', function(err, data) {
+            if (err) throw err;
+            let ranking = [];
+            let lineas = data.split("\n");
+            lineas.forEach((linea) => {
+                let datos = linea.split(",");
+                if(datos.length > 1){
+                    ranking.push(datos);
+                }
+            });
+            console.log(ranking);
+            socket.emit("ranking", ranking);
+        });
+    });
+
 
 
  
+/*a) Nombre del ganador
+b) Tiempo
+c) Pista
+d) Vueltas
+e) Identificador de partida*/
+
+
+
 
 
 
