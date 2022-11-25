@@ -9,6 +9,9 @@ import ListaPartidas from '../routes/ListaPartidas';
 import Juego from '../routes/Juego';
 import Estadisticas from '../routes/Estadisticas';
 const socket = io.connect('http://localhost:3001');
+//const socket = io.connect('http://152.231.203.141:8080');
+
+
 
 
 const Stack = createStackNavigator();
