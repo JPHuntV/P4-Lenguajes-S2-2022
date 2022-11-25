@@ -173,11 +173,16 @@ io.on("connection", (socket) => {
                         partida.posiciones.push(jugador);
                         console.log(partida.posiciones);
                         //remover jugador del tablero
-                        //tablero[x2][y2] = partida.matriz[x2][y2];
+                        tablero[x2][y2] = partida.matriz[x2][y2];
+                        
                     }
                     socket.emit("actualizarJugador", jugador);
                     actualizarPartida(partida);
-
+                    if(partida.posiciones.length === partida.jugadores.length){
+                        partida.estado = "finalizada";
+                        console.log("partida finalizada");
+                        io.to(partida.codigo).emit("finalizarPartida", partida);
+                    }
 
 
                         /*console.log("ganador");
@@ -321,8 +326,10 @@ io.on("connection", (socket) => {
                     }
 
                     partida.jugadores.splice(partida.jugadores.indexOf(jugador), 1);
+                    
+
                     partidaC.partida = JSON.stringify({state: partida});
-                    socket.to(partida.codigo).emit("userLeft", partidaC);
+                    io.to(partida.codigo).emit("userLeft", partidaC);
 
                 }
                 

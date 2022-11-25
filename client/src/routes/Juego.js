@@ -106,11 +106,16 @@ function Juego(props){
 
 
 
-        usuario.getSocket().on("ganador", (data) => {
-            console.log("ganador");
+        usuario.getSocket().on("finalizarPartida", (data) => {
+            console.log("finalizarPartida");
             console.log(data);
-            alert("Ganador: " + data[0]);
+            alert("La partida ha finalizado");
+            props.navigation.navigate("Inicio");
         });
+
+
+
+
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
             //clearInterval(interval);
