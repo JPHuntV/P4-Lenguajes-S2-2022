@@ -43,10 +43,19 @@ export default class StackNav extends Component{
                             backgroundColor: '#1e1f1e'
                         }
                     }}/>
-                <Stack.Screen name="PantallaSeleccion" component={PantallaSeleccion} />
+                <Stack.Screen 
+                    name="PantallaSeleccion" 
+                    component={PantallaSeleccion}
+                    options={{
+                        title: 'Menú principal',
+                    }} />
                 <Stack.Screen name="CrearPartida" component={CrearPartida} />
                 <Stack.Screen name="Lobby" component={Lobby} />
-                <Stack.Screen name="ListaPartidas" component={ListaPartidas} />
+                <Stack.Screen 
+                    name="ListaPartidas" 
+                    component={ListaPartidas} options={{
+                        title: 'Partidas disponibles',
+                    }} />
                 <Stack.Screen name='Juego' component={Juego} />
                 <Stack.Screen name='Estadisticas' component={Estadisticas} />
                 <Stack.Screen name='Ranking' component={Ranking} />
