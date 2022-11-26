@@ -1,9 +1,11 @@
 import React,{Component} from 'react';
+import {View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../routes/Home';
 import PantallaSeleccion from '../routes/PantallaSeleccion';
 import CrearPartida from '../routes/CrearPartida';
 import io from 'socket.io-client';
+
 import Lobby from '../routes/Lobby';
 import ListaPartidas from '../routes/ListaPartidas';
 import Juego from '../routes/Juego';
@@ -22,8 +24,25 @@ export default class StackNav extends Component{
     render(){
         return(
             /* crea un stack de navegación */
-            <Stack.Navigator> 
-                <Stack.Screen name="Home" component={Home} initialParams={{'pSocket':socket}}/>
+            
+
+            <Stack.Navigator
+                screenOptions={{
+                    animationEnabled: true,
+                    animationTypeForReplace: 'push',
+                }
+                }
+            > 
+                <Stack.Screen 
+                    name="Home" 
+                    component={Home} 
+                    initialParams={{'pSocket':socket}} 
+                    options={{
+                        headerShown:false,
+                        cardStyle:{
+                            backgroundColor: '#1e1f1e'
+                        }
+                    }}/>
                 <Stack.Screen name="PantallaSeleccion" component={PantallaSeleccion} />
                 <Stack.Screen name="CrearPartida" component={CrearPartida} />
                 <Stack.Screen name="Lobby" component={Lobby} />
@@ -31,8 +50,8 @@ export default class StackNav extends Component{
                 <Stack.Screen name='Juego' component={Juego} />
                 <Stack.Screen name='Estadisticas' component={Estadisticas} />
                 <Stack.Screen name='Ranking' component={Ranking} />
-
             </Stack.Navigator>
+            
         );
     }
 }
