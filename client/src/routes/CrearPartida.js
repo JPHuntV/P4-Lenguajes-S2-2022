@@ -1,11 +1,62 @@
-import React, {Component} from "react";
+import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { io, Socket } from "socket.io-client";
 import Partida from "../clases/Partida";
 
-export default class CrearPartida extends Component{
+function CrearPartida(props) {
 
-    constructor(props) {
+
+    const makeid = (length) =>{
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        if(salaExiste(result)){
+            console.log("id repetido");
+            return makeid(length);
+        }else{
+            console.log("id no repetido");
+            setSala(result);
+            return result;
+        }
+    }
+
+    const salaExiste = (id) => {
+        let socket = usuario.getSocket();
+        socket.emit("verificarSala",id);
+        socket.on("salaExiste",(existe)=>{
+            console.log(existe);
+            return existe;
+        });
+    }
+
+    const [usuario, setUsuario] = useState(props.route.params.usuario);
+    const [sala, setSala] = useState("");
+    const [modo, setModo] = useState("Vs");
+    const [pista, setPista] = useState("Pista 1");
+    const [vueltas, setVueltas] = useState(3);
+    const [tiempo, setTiempo] = useState(0);
+    const [jugadores, setJugadores] = useState(2);
+    const [partida, setPartida] = useState(null);
+
+    useEffect(() => {
+        console.log("useEffect");
+        
+        if(sala == ""){
+            setSala(makeid(5));
+        }
+
+        usuario.getSocket().on("partidaCreadaC",(partidaC)=>{
+            console.log("partida creada");
+            console.log(partida);
+            let partidaTemp = partidaFromJson(partidaC);
+            props.navigation.navigate("Lobby",{usuario: usuario, partida: partida});
+        });
+    }, []);
+
+    /*constructor(props) {
         super(props);
         this.state = {
             usuario: props.route.params.usuario,
@@ -21,56 +72,43 @@ export default class CrearPartida extends Component{
 
     componentDidMount(){
         this.setState({sala:this.makeid(5)});
-    }   
+    }   */
 
-    makeid = (length) =>{
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        if(this.salaExiste(result)){
-            console.log("id repetido");
-            return this.makeid(length);
-        }else{
-            console.log("id no repetido");
-            this.setState({sala: result});
-            return result;
-        }
+    
+
+    
+    const partidaFromJson = (json) => {
+        let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
+        partida.setCreador(json.creador);
+        partida.setJugadores(json.jugadores);
+        partida.setEstado(json.estado);
+        partida.setTablero(json.tablero);
+        partida.setMatriz(json.matriz);
+        return partida;
     }
-
-    salaExiste = (id) => {
-        let socket = this.state.usuario.getSocket();
-        socket.emit("verificarSala",id);
-        socket.on("salaExiste",(existe)=>{
-            console.log(existe);
-            return existe;
-        });
-    }
-
-    CrearPartida = () => {
+    const CrearPartida = () => {
         console.log("estoy en CrearPartida");
-        this.state.usuario.setTipo("Creador");
+        usuario.setTipo("Creador");
         let partida;
-        partida = new Partida(this.state.sala,this.state.modo,this.state.pista,this.state.vueltas,this.state.tiempo,this.state.jugadores);
-        partida.setCreador(this.state.usuario.toJson());
-        partida.agregarJugador(this.state.usuario.toJson());
-        partida.setTablero(this.getMatrixTablero());
+        partida = new Partida(sala,modo,pista,vueltas,tiempo,jugadores);
+        partida.setCreador(usuario.toJson());
+        partida.agregarJugador(usuario.toJson());
+        let matriz = getMatrixTablero();
+        partida.setTablero(matriz);
+        partida.setMatriz(matriz);
         
-        let socket = this.state.usuario.getSocket();
+        let socket = usuario.getSocket();
         console.log("voy a emitir crearPartida");
         let nuevaPartida = JSON.stringify(partida);
-        console.log(partida.getTablero());
-        socket.emit("crearPartida",{partida:nuevaPartida});
-        socket.on("partidaCreadaC",(partidaC)=>{
-            console.log("partida creada");
-            
-            this.props.navigation.navigate("Lobby",{usuario: this.state.usuario, partida: partida});
-        });
+
+        console.log(partida);
+        socket.emit("crearPartida",{partida:JSON.stringify(partida)});
+        setPartida(partida);
+        
 
     }
-    getMatrixTablero = () => {
+    
+    const getMatrixTablero = () => {
         let pista = require('../pistas/pista1.csv');
         let matriz=[];
         fetch(pista)
@@ -87,66 +125,66 @@ export default class CrearPartida extends Component{
         return matriz;
     }
 
-    render(){
+   
         return(
             <View>
                 <Text>Crear partida</Text>
-                <Text>Sala: {this.state.sala}</Text>
-                <Text>Seleccionar modo de juego: {this.state.modo}</Text>
+                <Text>Sala: {sala}</Text>
+                <Text>Seleccionar modo de juego: {modo}</Text>
                 <TouchableOpacity 
-                    style={this.state.modo === "Vs" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
-                    onPress={()=>{console.log("Vs"); this.setState({modo:"Vs"}) }}>
-                    <Text style={this.state.modo ==="Vs" ? {color:"white"}:{color:"black"} }>Vs</Text>
+                    style={modo === "Vs" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
+                    onPress={()=>setModo("Vs")}>
+                    <Text style={modo ==="Vs" ? {color:"white"}:{color:"black"} }>Vs</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={this.state.modo === "Contrareloj" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
-                    onPress={()=>{console.log("Contrareloj"); this.setState({modo:"Contrareloj"}) }}>
-                    <Text style={this.state.modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
+                    style={modo === "Contrareloj" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
+                    onPress={()=>{console.log("Contrareloj"); setModo("Contrareloj") }}>
+                    <Text style={modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
                 </TouchableOpacity>
                 <Text>Seleccionar pista</Text>
                 <TouchableOpacity
-                    style={this.state.pista === "Pista 1" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 1"); this.setState({pista:"Pista 1"}) }}>
-                    <Text style={this.state.pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Pista 1</Text>
+                    style={pista === "Pista 1" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
+                    onPress={()=>{console.log("Pista 1"); setPista("Pista 1") }}>
+                    <Text style={pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Pista 1</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={this.state.pista === "Pista 2" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 2"); this.setState({pista:"Pista 2"}) }}>
-                    <Text style={this.state.pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Pista 2</Text>
+                    style={pista === "Pista 2" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
+                    onPress={()=>{console.log("Pista 2"); setPista("Pista 2") }}>
+                    <Text style={pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Pista 2</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={this.state.pista === "Pista 3" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 3"); this.setState({pista:"Pista 3"}) }}>
-                    <Text style={this.state.pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Pista 3</Text>
+                    style={pista === "Pista 3" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
+                    onPress={()=>{console.log("Pista 3"); setPista("Pista 3") }}>
+                    <Text style={pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Pista 3</Text>
                 </TouchableOpacity>
                 <Text>Numero de vueltas</Text>
                 <input 
                     type="number" 
                     min="3"
-                    value={this.state.vueltas} onChange={(e)=>{this.setState({vueltas:e.target.value})}}
+                    value={vueltas} onChange={(e)=>{setVueltas(e.target.value)}}
                 ></input>
                 <Text>Numero de jugadores</Text>
                 <input
                     type="number"
                     min="2"
-                    value={this.state.jugadores} onChange={(e)=>{this.setState({jugadores:e.target.value})}}
+                    value={jugadores} onChange={(e)=>{setJugadores(e.target.value)}}
                 ></input>
-                {this.state.modo === "Contrareloj" ?
+                {modo === "Contrareloj" ?
                     <view>
 
                     <text>Tiempo</text>
                     <input
                         type="number"
                         min="30"
-                        value={this.state.tiempo} onChange={(e)=>{this.setState({tiempo:e.target.value})}}
+                        value={tiempo} onChange={(e)=>{setTiempo(e.target.value)}}
                         ></input>
                     </view>
                 :null}
-                <button onClick={() => this.CrearPartida()}>Crear partida</button>
+                <button onClick={() => CrearPartida()}>Crear partida</button>
             </View>
         );
-    }
-}
+    
+} export default CrearPartida;
 
 
 const styles = StyleSheet.create({

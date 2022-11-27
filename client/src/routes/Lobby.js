@@ -8,7 +8,7 @@ function Lobby(props) {
     const [partida, setPartida] = useState(props.route.params.partida);
     //const [jugadores, setJugadores] = useState(props.route.params.partida.getJugadores());
     //const [ultimoJugador, setUltimoJugador] = useState(null);
-    const temporizadorLobby = 300000;
+    const temporizadorLobby = 30000000;//quitar 2 ceros
     useEffect(() => {
         console.log("useEffect");
         usuario.getSocket().on("userJoined", (partidaTemp) => {

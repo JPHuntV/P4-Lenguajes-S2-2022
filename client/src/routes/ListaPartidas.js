@@ -1,12 +1,15 @@
 import React, {Component, useEffect, useState} from "react";
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, Text, Image, TouchableOpacity} from "react-native";
 import Partida from "../clases/Partida";
+import * as stylesTemp from "../css/ListaPartidas.css.js";
+import TestTablero from "../components/TestTablero";
+const styles = stylesTemp.style;
 
 function ListaPartidas(props){
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partidas, setPartidas] = useState(props.route.params.partidas);
-    const [partida, setPartida] = useState(null);
+
     
     useEffect(() => {
         console.log("useEffect");
@@ -61,65 +64,47 @@ function ListaPartidas(props){
         partidas.forEach(partidaTemp => {
             let partidaJson = JSON.parse(partidaTemp.partida).state
             let partida = partidaFromJson(partidaJson);
-            console.log(partida.getJugadores());
+            console.log(partida.getMatriz());
             if(partida.getEstado() == "esperando" && partida.getJugadores().length < partida.getCantJugadores()){
                 itemsPartidas.push(
-                    <View key={partida.getCodigo()}>
-                        <Text>{partida.toString()}</Text>
-                        <TouchableOpacity onPress={()=> joinRoom(partida)}>
-                            <Text>Unirse</Text>
+                    <TouchableOpacity  key={partida.getCodigo()} style={styles.gameCard} onPress={()=> joinRoom(partida)}>
+                        <View style={styles.gameImage}>
+                            <TestTablero partida={partida}/>
+                        </View>
+                        <View style={styles.gameInfo}>
+                            <Text >{partida.getPista()}</Text>
+                            <Text >{partida.getModo()}</Text>
+                            <Text >{partida.getVueltas()}</Text>
+                            {partida.getModo != "Vs" ? <Text >{partida.getTiempo()}</Text> : null}
+                            <Text>Jugadores conectados:{partida.getJugadores().length}</Text>
+                            <Text>Sala: {partida.getCodigo()}</Text>
+                            
+                        </View>
                         </TouchableOpacity>
-                    </View>
+
                 );
             }
         });
+        if(itemsPartidas.length == 0){
+            itemsPartidas.push(
+            <Text key="noPartidas">No hay partidas disponibles</Text>
+            );
+        }
         return itemsPartidas;
     }
 
     return(
-        <View>
-            <Text>Estoy en lista de partidas</Text>
+        <View style={styles.container}>
             <Text>{usuario.getSocket().id }</Text>
+            <View style={styles.head}>
+                <Image style={styles.imagenUsuario} source={require("../assets/images/usuario.png")}/>
+                <Text style={{fontSize:30}}>{usuario.getNickName()}</Text>
+            </View>
+            <View style = {styles.gamesContainer}>
             {getItemsPartidas()}
+            </View>
         </View>
     );
 }
 
 export default ListaPartidas;
-/*
-export default class ListaPartidas extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            usuario: props.route.params.usuario,
-            partidas: props.route.params.partidas
-        };
-    }
-
-    partidaFromJson(json){
-        let partida = new Partida(json.codigo,json.modo,json.pista,json.vueltas,json.tiempo,json.cantJugadores);
-        partida.setCreador(json.creador);
-        partida.setJugadores(json.jugadores);
-        return partida;
-    }
-    render(){
-        let itemsPartidas = [];
-        this.state.partidas.forEach(partidaTemp => {
-            let partidaJson = JSON.parse(partidaTemp.partida).state
-            let partida = this.partidaFromJson(partidaJson);
-            //console.log(partida.getJugadores());
-            
-            itemsPartidas.push(
-                <Text key={partida.getCodigo()}>{partida.toString()}</Text>
-            );
-        });
-
-        return(
-            <View>
-                <Text>Estoy en lista de partidas</Text>
-                <Text> {this.state.partidas.length}</Text>
-                {itemsPartidas}
-            </View>
-        );
-    }
-}*/
