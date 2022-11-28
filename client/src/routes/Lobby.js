@@ -23,11 +23,6 @@ function Lobby(props) {
             console.log(partidaObj);
             setPartida(partidaObj);
 
-            /* let partidaTemp = partida;
-            partidaTemp.getJugadores().push(data);
-            setPartida(partidaTemp);
-            setJugadores(partidaTemp.getJugadores());
-            setUltimoJugador(data);*/
         });
 
         const interval = setInterval(() => {
@@ -124,7 +119,6 @@ function Lobby(props) {
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
-        //console.log(partida.getJugadores());
         let itemsJugadores = [];
         partida.getJugadores().forEach(jugador => {
             itemsJugadores.push(
@@ -163,7 +157,7 @@ function Lobby(props) {
                 //disable si el color ya fue elegido
 
                 <TouchableOpacity key={color} style={[styles.colorCard,{backgroundColor:color}]} onPress={() => cambiarColor(color)} disabled={elegido}>
-                    {elegido && <Text style={{color: "white"}}>{elegido}</Text>}
+                    {elegido && <Text style={{color: "white", fontSize:20, fontWeight:'bold'}}>{elegido}</Text>}
                 </TouchableOpacity>
             );
         });
@@ -183,16 +177,16 @@ function Lobby(props) {
 
     return(
         <View style={styles.container}>
-            <Text>{partida.getCodigo()}</Text>
+            <Text style={{fontSize:25,  fontWeight:'bold', color:'white'}}>Sala: {partida.getCodigo()}</Text>
             <View style={styles.rowContainer}>
                 <View style={styles.containerJugadores}>
-                    <Text style={{fontSize:20, marginVertical:5}} >Jugadores: {partida.getJugadores().length}</Text>
+                    <Text style={{fontSize:20, marginVertical:5, fontWeight:'bold', color:'white'}} >Jugadores: {partida.getJugadores().length}</Text>
                     <ScrollView style={styles.jugadoresScroll}>
                         {getItemsJugadores()}   
                     </ScrollView>
                 </View>
                 <View style={styles.containerColores}>
-                    <Text style={{fontSize:20, marginVertical:5}} >Seleccione su vehículo</Text>
+                    <Text style={{fontSize:20, marginVertical:5, fontWeight:'bold', color:'white'}} >Seleccione su vehículo</Text>
                     <View style={styles.listaColores}>
                         {getSelectorColores()}  
                     </View>
@@ -200,7 +194,7 @@ function Lobby(props) {
             </View>
                 {(usuario.getTipo() == "Creador") ?
                     <TouchableOpacity onPress={()=> iniciarPartida()} style={styles.botonInicio} >
-                        <Text>Empezar partida</Text>
+                        <Text style={{fontSize:20, color:'white', fontWeight:'bold'}}  >Empezar partida</Text>
                     </TouchableOpacity>
                     :
                     <Text style={styles.botonInicio}>Esperando al creador</Text>

@@ -179,7 +179,7 @@ function CrearPartida(props) {
                     :null}
                 </View>
 
-                    <TouchableOpacity style={styles.botonCrear} onClick={() => CrearPartida()}>
+                    <TouchableOpacity style={styles.botonCrear} onPress={(e) => {CrearPartida()}}>
                         <Text style={{color:'white', fontSize:20}} >
                             Crear partida
                         </Text>
