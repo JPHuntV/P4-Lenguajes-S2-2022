@@ -1,6 +1,8 @@
 import React, { useEffect, useState} from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import Partida from "../clases/Partida";
+import * as stylesTemp from "../css/Estadisticas.css.js";
+const styles = stylesTemp.style;
 
 
 function Estadisticas(props) {
@@ -16,9 +18,9 @@ function Estadisticas(props) {
         for (let i = 0; i < posiciones.length; i++) {
             items.push(
                 <View style={styles.itemPosiciones} key={posiciones[i][1]}>
-                    <Text style={styles.textoPosiciones}>{posiciones[i][0]}</Text>
-                    <Text style={styles.textoPosiciones}>{i+1}</Text>
-                    <TouchableOpacity disabled style={{backgroundColor: posiciones[i][3].color, width: 20, height: 20, borderRadius: 50}}></TouchableOpacity>
+                    <Text style={styles.textPosiciones}>{i+1}</Text>
+                    <Text style={styles.textPosiciones}>{posiciones[i][0]}</Text>
+                    <TouchableOpacity disabled style={{backgroundColor: posiciones[i][3].color, width: 20, height: 20, borderRadius: 50, margin:'auto'}}></TouchableOpacity>
 
                 </View>
             );
@@ -46,10 +48,6 @@ function Estadisticas(props) {
                     colorCelda = "blue";
                 }else if(celda[0] === "x"){
                     colorCelda = "black";
-                }else if(typeof celda === "object"){
-                    console.log("es un objeto");
-                    console.log(celda);
-                    celda = celda[0];
                 }
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
@@ -78,66 +76,31 @@ function Estadisticas(props) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Estadisticas</Text>
-            <Text style={styles.text}>Codigo: {partida.getCodigo()}</Text>
-            <Text style={styles.text}>Modo: {partida.getModo()}</Text>
-            <Text style={styles.text}>Pista: {partida.getPista()}</Text>
-            {getItemsPosiciones()}
-            <View style={styles.tablero}>
-                {generarTablero()}
+            <Text>Partida finalizada</Text>
+            <View style={styles.rowContainer}>
+                <View style={styles.containerJugadores}>
+                    <Text style={{fontSize:20, marginVertical:5}} >Posiciones</Text>
+                    <ScrollView style={styles.jugadoresScroll}>
+                    {getItemsPosiciones()}  
+                    </ScrollView>
+                </View>
+                <View style={styles.containerColores}>
+                    <View style= {styles.containerInfo}>
+                        <Text style={styles.text}>Codigo: {partida.getCodigo()}</Text>
+                        <Text style={styles.text}>Modo: {partida.getModo()}</Text>
+                        <Text style={styles.text}>Pista: {partida.getPista()}</Text> 
+                        <Text style={styles.text}>Pista: {partida.getPista()}</Text> 
+                    </View>
+                    <View style={styles.tablero}>
+                        {generarTablero()}
+                    </View>
+                </View>
             </View>
-            <TouchableOpacity style={styles.boton} onPress={() => volverInicio()}>
-                <Text style={styles.textoBoton}>Volver</Text>
+            <TouchableOpacity style={styles.botonVolver} onPress={() => volverInicio()}>
+                <Text style={styles.text}>Volver</Text>
             </TouchableOpacity>
         </View>
     );
 
 }
 export default Estadisticas;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    text: {
-        fontSize: 20,
-        color: "black",
-    },
-    tarjetaJugador: {
-        backgroundColor: "white",
-        alignContent: "center",
-        flexDirection: "row",
-    },
-    itemPosiciones: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: 200,
-        margin: 10,
-    },
-    textoPosiciones: {
-        fontSize: 20,
-        color: "black",
-    },
-    tablero: {
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    fila: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    celda: {
-        width: 30,
-        height: 30,
-        borderColor: "black",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-
-});

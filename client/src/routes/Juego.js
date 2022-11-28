@@ -160,13 +160,13 @@ function Juego(props){
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
-        console.log(partida.getJugadores());
+        //console.log(partida.getJugadores());
         let itemsJugadores = [];
         partida.getJugadores().forEach(jugador => {
             itemsJugadores.push(
-                <View key={jugador[1]} style={styles.tarjetaJugador}>
-                    <Text>{"nombre: " + jugador[0] + "  socket: " + jugador[1] + "  color: " + jugador[3].color  }</Text>
-                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 20, height: 20, borderRadius: 50}}></TouchableOpacity>
+                <View key={jugador[1]} style={styles.tarjetaJugador} >
+                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 35, height: 35, borderRadius: 50, margin:5}}></TouchableOpacity>
+                    <Text style={{fontSize:20, marginLeft:10}} >{jugador[0]}</Text>
                 </View>
 
             );
@@ -184,6 +184,7 @@ function Juego(props){
         let j = 0;
         matriz.forEach(fila => {
             let filaTablero = [];
+            
             fila.forEach(celda => {
                 let colorCelda = "white";
                 if(celda[0] === "1"){

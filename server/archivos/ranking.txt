@@ -6,3 +6,7 @@ asdf,----,Pista 1,0,EpzGU
 hunt,----,Pista 1,0,C0ZiH
 a,----,Pista 1,0,XjlLa
 a,----,Pista 1,0,IMK0m
+a,----,Pista 1,0,u1Hbf
+jean,----,Pista 1,0,PNk46
+hunt,----,Pista 1,0,VYFKG
+esteesunnombrelargo,----,Pista 1,0,JVVEm
