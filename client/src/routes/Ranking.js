@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, Text, ScrollView,SafeAreaView, TouchableOpacity} from "react-native";
+import { style } from "../css/Lobby.css.js";
+import * as stylesTemp from "../css/Ranking.css.js";
+const styles = stylesTemp.style;
 
 
 
@@ -25,11 +28,11 @@ function Ranking(props) {
             ranking.forEach((element) => {
                 items.push(
                     <View style={styles.itemRanking} key={i}>
-                        <Text style={styles.texto}>{element[0]}</Text>
-                        <Text style={styles.texto}>{element[1]}</Text>
-                        <Text style={styles.texto}>{element[2]}</Text>
-                        <Text style={styles.texto}>{element[3]}</Text>
-                        <Text style={styles.texto}>{element[4]}</Text>
+                        <Text style={styles.textoRanking}>{element[0]}</Text>
+                        <Text style={styles.textoRanking}>{element[1]}</Text>
+                        <Text style={styles.textoRanking}>{element[2]}</Text>
+                        <Text style={styles.textoRanking}>{element[3]}</Text>
+                        <Text style={styles.textoRanking}>{element[4]}</Text>
                     </View>
                 );
             });
@@ -39,63 +42,25 @@ function Ranking(props) {
 
     return (
         <View style={styles.container}>
+            <View style={styles.scroll}>
+            <View style={[styles.itemRanking]}>
+                <Text style={[styles.textoRanking,{fontWeight:'bold'}]}>Ganador</Text>
+                <Text style={[styles.textoRanking,{fontWeight:'bold'}]}>Tiempo</Text>
+                <Text style={[styles.textoRanking,{fontWeight:'bold'}]}>Pista</Text>
+                <Text style={[styles.textoRanking,{fontWeight:'bold'}]}>Vueltas</Text>
+                <Text style={[styles.textoRanking,{fontWeight:'bold'}]}>Sala</Text>
+            </View>
+
+
     
    
                 {getItemsRanking()}
+            </View>
+        
+           
 
         </View>
     );
 }
 
 export default Ranking;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    header: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    body: {
-        flex: 8,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    footer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    textoHeader: {
-        color: "#ffffff",
-        fontSize: 30,
-    },
-    textoRanking: {
-        fontSize: 20,
-    },
-    itemRanking: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        width: "100%",
-    },
-    boton: {
-        backgroundColor: "#ffffff",
-        width: 200,
-        height: 50,
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    textoBoton: {
-        color: "#000000",
-        fontSize: 20,
-    },
-});
-
-
-
