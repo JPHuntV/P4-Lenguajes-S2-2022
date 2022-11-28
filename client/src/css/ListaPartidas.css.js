@@ -30,7 +30,7 @@ export const style ={
         backgroundColor: "blue",
     },
     gameInfo: {
-        backgroundColor: "green",
+        backgroundColor: "gray",
         flex: 1,
         flexDirection: "column",
         width: '100vh',

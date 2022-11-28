@@ -1,7 +1,10 @@
 import React, {Component, useEffect, useState} from "react";
 
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import Partida from "../clases/Partida";
+import * as stylesTemp from "../css/Lobby.css.js";
+const styles = stylesTemp.style;
+
 function Lobby(props) {
 
     const [usuario, setUsuario] = useState(props.route.params.usuario);
@@ -121,13 +124,13 @@ function Lobby(props) {
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
-        console.log(partida.getJugadores());
+        //console.log(partida.getJugadores());
         let itemsJugadores = [];
         partida.getJugadores().forEach(jugador => {
             itemsJugadores.push(
-                <View key={jugador[1]} style={styles.tarjetaJugador}>
-                    <Text>{"nombre: " + jugador[0] + "  socket: " + jugador[1] + "  color: " + jugador[3].color  }</Text>
-                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 20, height: 20, borderRadius: 50}}></TouchableOpacity>
+                <View key={jugador[1]} style={styles.tarjetaJugador} >
+                    <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 35, height: 35, borderRadius: 50, margin:5}}></TouchableOpacity>
+                    <Text style={{fontSize:20, marginLeft:10}} >{jugador[0]}</Text>
                 </View>
 
             );
@@ -152,14 +155,16 @@ function Lobby(props) {
     const getSelectorColores = () => {
         const colores = ["#9a1b5b", "#3e1379", "#0a5f42", "#511111", "#115151", 
                 "#96e637", "#9a0000", "#a3b899", "#65cca9", "#ff461f", "#a25670", 
-                "#f0b57b", "#03e5ce", "#4c70da", "#6171b7", "#006666", "#800000", "#8a2be2"];
+                "#f0b57b", "#03e5ce", "#4c70da", "#800000", "#8a2be2"];
        let itemsColores = [];
         colores.forEach(color => {
+            let elegido = colorElegido(color);
             itemsColores.push(
                 //disable si el color ya fue elegido
-                
 
-                <TouchableOpacity key={color} style={[styles.colorCard,{backgroundColor:color}]} onPress={() => cambiarColor(color)} disabled={colorElegido(color)}></TouchableOpacity>
+                <TouchableOpacity key={color} style={[styles.colorCard,{backgroundColor:color}]} onPress={() => cambiarColor(color)} disabled={elegido}>
+                    {elegido && <Text style={{color: "white"}}>{elegido}</Text>}
+                </TouchableOpacity>
             );
         });
         return itemsColores;
@@ -169,7 +174,7 @@ function Lobby(props) {
         let elegido = false;
         partida.getJugadores().forEach(jugador => {
             if(jugador[3].color == color){
-                elegido = true;
+                elegido = jugador[0];
             }
         });
         return elegido;
@@ -177,25 +182,29 @@ function Lobby(props) {
 
 
     return(
-        <View>
-            <Text>Estoy en lobby</Text>
-            <Text>Jugadores</Text>
-            {getItemsJugadores()}
-            
-            <Text>Cantidad de jugadores {partida.getJugadores().length}</Text>
-            {(usuario.getTipo() == "Creador") ?
-                <TouchableOpacity onPress={()=> iniciarPartida()}>
-                    <Text>Empezar partida</Text>
-                </TouchableOpacity>
-                :null
-            }
-
-            <View style={styles.selectorColores}>
-                {/*seleccionar color*/}
-                {getSelectorColores()}    
+        <View style={styles.container}>
+            <Text>{partida.getCodigo()}</Text>
+            <View style={styles.rowContainer}>
+                <View style={styles.containerJugadores}>
+                    <Text style={{fontSize:20, marginVertical:5}} >Jugadores: {partida.getJugadores().length}</Text>
+                    <ScrollView style={styles.jugadoresScroll}>
+                        {getItemsJugadores()}   
+                    </ScrollView>
+                </View>
+                <View style={styles.containerColores}>
+                    <Text style={{fontSize:20, marginVertical:5}} >Seleccione su vehículo</Text>
+                    <View style={styles.listaColores}>
+                        {getSelectorColores()}  
+                    </View>
+                </View>
             </View>
-
-            
+                {(usuario.getTipo() == "Creador") ?
+                    <TouchableOpacity onPress={()=> iniciarPartida()} style={styles.botonInicio} >
+                        <Text>Empezar partida</Text>
+                    </TouchableOpacity>
+                    :
+                    <Text style={styles.botonInicio}>Esperando al creador</Text>
+                }
         </View>
     );
 }
@@ -203,31 +212,3 @@ function Lobby(props) {
 export default Lobby;
 
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    colorCard: {
-        width: 50,
-        height: 70,
-        borderRadius: 15,
-        margin: 10,
-    },
-    tarjetaJugador: {
-        backgroundColor: "white",
-        alignContent: "center",
-        flexDirection: "row",
-
-        borderRadius: 10,
-        margin: 10,
-        padding: 10,
-    },
-    selectorColores: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "center",
-    }
-});

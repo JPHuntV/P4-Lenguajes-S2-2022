@@ -102,8 +102,12 @@ function CrearPartida(props) {
         let nuevaPartida = JSON.stringify(partida);
 
         console.log(partida);
-        socket.emit("crearPartida",{partida:JSON.stringify(partida)});
-        setPartida(partida);
+        socket.emit("crearPartida",{partida:nuevaPartida});
+        socket.on("partidaCreadaC",(partidaC)=>{
+            console.log("partida creada");
+
+            props.navigation.navigate("Lobby",{usuario: usuario, partida: partida});
+        });
         
 
     }

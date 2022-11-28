@@ -21,19 +21,24 @@ function TestTablero({partida}) {
             return matriz;
         }
     const [matriz, setMatriz] = useState(getMatrixTablero());
-    const [tablero, setTablero] = useState([]);
+    const [forsarRender, setForsarRender] = useState(false);
 
     useEffect(() => {
         console.log("useEffect");
-        let tab = getMatrixTablero();
+        
+        const interval = setInterval(() => {
+            console.log("interval");
+            setForsarRender(!forsarRender);
+            clearInterval(interval);
+        },10);
     }, []);
 
 
      
-    const generarTablero = (mat) =>{
+    const generarTablero = (matriz) =>{
         console.log("generarTablero");
-        console.log(mat);
-        let matriz = mat;   
+        console.log(matriz);
+        //let matriz = mat;   
         let tablero = [];
         let i = 0;
         let j = 0;
@@ -90,42 +95,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     celda: {
-        borderColor: "black",
-        width: '0.66vw',
-        height: '0.66vw',
+        width: '0.8vh',
+        height: '0.8vh',
         justifyContent: "center",
         alignItems: "center",
         
     },
     tablero: {
-        borderWidth: 1,
-        borderColor: "black",
         justifyContent: "center",
         alignItems: "center",
-    },
-    celdaPared: {
-        borderWidth: 1,
-        borderColor: "black",
-        width: 15,
-        height: 15,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "red",
-    },
-    //ficha circular
-    celdaFicha: {
-        borderWidth: 1,
-        borderColor: "black",
-        width: 25,
-        height: 25,
-        justifyContent: "center",
-        alignItems: "center",
-        //backgroundColor: usuario.getFicha().color,
-        borderRadius: 10,
-    },
-
-
-
- 
+    }, 
 
 });
