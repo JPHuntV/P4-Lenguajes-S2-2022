@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import Partida from "../clases/Partida";
 //import Tablero from "./Tablero";
 //var reader = require('any-text');
+import * as stylesTemp from "../css/Juego.css.js";
+const styles = stylesTemp.style;
 
 function Juego(props){
 
@@ -201,10 +203,10 @@ function Juego(props){
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
                         {typeof(partida.getTablero()[i][j]) === "object" ?
                             <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color}]}>
-                                <Text>{partida.getTablero()[i][j][0]}</Text>
+                                <Text>{/*partida.getTablero()[i][j][0]*/}</Text>
                             </TouchableOpacity>
                             :
-                            <Text>{celda}</Text>
+                            <Text>{/*celda*/}</Text>
                         }      
                     </TouchableOpacity>
                 );
@@ -225,83 +227,35 @@ function Juego(props){
     
 
     return(
-        <View>
-            <Text>Estoy en iniciarPartida</Text>
-            <Text>Jugadores</Text>
-            {getItemsJugadores()}
-            <Text>Cantidad de jugadores {partida.getJugadores().length}</Text>
-            {(usuario.getTipo() == "Creador") ?
-                <Text>Esperando admin</Text>
-                :null
-            }
-            {sentidoCorrecto ?
-                <Text>Sentido correcto</Text>
-                :<Text>Sentido incorrecto</Text>
-            }
-            <Text>{tiempo}</Text>
-            <View style={styles.tablero}>
-                {generarTablero()}
-                
-                {//partida.getTablero().length > 0 ? generarTablero() : console.log("matriz vacia")
-                }
-            
-                
+        <View style={styles.container}>
+            <Text>{partida.getCodigo()}</Text>
+            <View style={styles.rowContainer}>
+                <View style={styles.containerJugadores}>
+                    <Text style={{fontSize:20, marginVertical:5}} >Jugadores: {partida.getJugadores().length}</Text>
+                    <ScrollView style={styles.jugadoresScroll}>
+                        {getItemsJugadores()}   
+                    </ScrollView>
+                </View>
+                <View style={styles.containerColores}>
+                    <View style={styles.tablero}>
+                        {generarTablero()}
+                    </View>
+                    {!sentidoCorrecto ?
+                        <Text style={{color:'white',position: 'absolute'}}>Sentido incorrecto</Text>
+                        :null
+                    }
+                </View>
+
             </View>
-            <Text>Tablero</Text>
-
-
+            
         </View>
+
+
+
+        
     );
 
 
 }export default Juego;
 
 
-
-const styles = StyleSheet.create({
-    fila: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    celda: {
-        borderWidth: 1,
-        borderColor: "black",
-        width: 35,
-        height: 35,
-        justifyContent: "center",
-        alignItems: "center",
-        
-    },
-    tablero: {
-        borderWidth: 1,
-        borderColor: "black",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    celdaPared: {
-        borderWidth: 1,
-        borderColor: "black",
-        width: 35,
-        height: 35,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "red",
-    },
-    //ficha circular
-    celdaFicha: {
-        borderWidth: 1,
-        borderColor: "black",
-        width: 25,
-        height: 25,
-        justifyContent: "center",
-        alignItems: "center",
-        //backgroundColor: usuario.getFicha().color,
-        borderRadius: 10,
-    },
-
-
-
- 
-
-});

@@ -26,6 +26,9 @@ export const style ={
         height: "100%",
         width: "55%",
         alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        
     },
     listaColores: {
         flex:1,
@@ -89,10 +92,39 @@ export const style ={
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
-    }
-    
+    },
+    fila: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    celda: {
+        //borderWidth: 1,
+        borderColor: "black",
+        width: '4.25vh',
+        height: '3vh',
+        justifyContent: "center",
+        alignItems: "center",
+        
+    },
+    tablero: {
+        //borderWidth: 1,
+        borderColor: "black",
+        justifyContent: "center",
+        alignItems: "center",
+        position: 'absolute',
+    },
 
-
-
+    //ficha circular
+    celdaFicha: {
+        //borderWidth: 1,
+        borderColor: "black",
+        width: '3vh',
+        height: '3vh',
+        justifyContent: "center",
+        alignItems: "center",
+        //backgroundColor: usuario.getFicha().color,
+        borderRadius: 1000,
+    },
 
 }
