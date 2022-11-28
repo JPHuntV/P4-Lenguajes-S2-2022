@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import {Text,View,TouchableOpacity} from "react-native";
+import {Text,View,Image,TouchableOpacity} from "react-native";
 
 import Usuario from "../clases/Usuario";
 import * as stylesTemp from "../css/Home.css.js";
@@ -32,9 +32,8 @@ function Home(props) {
         <View style={styles.container}>
             <Text></Text>
             <View style={styles.container2} >
-                <TouchableOpacity style={styles.logo} disabled={true}>
-                    <Text style={styles.textoLogo}>Tic Tac Toe</Text>
-                </TouchableOpacity>
+                    <Image style={styles.logo} source={require("../assets/images/logo.png")}></Image>
+              
                 <View style={styles.container3}>
                     <Text 
                         style={[{
@@ -43,7 +42,7 @@ function Home(props) {
                             height: '5vh',
                             width: '30vw',
                         }]}
-                    >Ingrese su nickName</Text>
+                    >Ingrese su nickname</Text>
                     {/* redirige a la página StackScreen */}
                     
                     <input 
@@ -64,7 +63,7 @@ function Home(props) {
                                 alert("Ingrese un nickName") 
                             }}
                     >
-                        <Text>Enviar</Text>
+                        <Text style={{color:'white', fontSize:20}} >Enviar</Text>
                     </TouchableOpacity>
                 </View>
             </View>

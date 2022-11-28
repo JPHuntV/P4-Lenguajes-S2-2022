@@ -20,30 +20,30 @@ function PantallaSeleccion(props){
         <View style={styles.container}>
             <View style={styles.head}>
                 <Image style={styles.imagenUsuario} source={require("../assets/images/usuario.png")}/>
-                <Text style={{fontSize:30}}>{usuario.getNickName()}</Text>
+                <Text style={{fontSize:30, color:"#ffffff", marginTop:'2vh' }}>{usuario.getNickName()}</Text>
             </View>
             <View style={styles.rowContainer}>
                 <TouchableOpacity 
                     style={styles.gameModeCard}
                     onPress={()=>props.navigation.navigate("CrearPartida",{usuario:usuario }) }> 
                     <Image style={styles.gameModeImage} source={require("../assets/images/crearPartida.png")}/>
-                    <Text>Crear partida</Text>
-                    <Text>Crea una sala e invita a tus amigos para que compitan contra ti</Text>
+                    <Text style={styles.titulo} >Crear partida</Text>
+                    <Text style={styles.textoDesc}>Crea una sala e invita a tus amigos para que compitan contra ti</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                     style={styles.gameModeCard}
                     onPress={()=> irAPartida()}> 
                     <Image style={styles.gameModeImage} source={require("../assets/images/unirsePartida.png")}/>
-                    <Text>Unirser a partida</Text>
-                    <Text>Unete a una partida ya existente y compite contra hasta 11 jugadores</Text>
+                    <Text style={styles.titulo} >Unirser a partida</Text>
+                    <Text style={styles.textoDesc}>Unete a una partida ya existente y compite contra hasta 11 jugadores</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.gameModeCard}
                     onPress={()=> props.navigation.navigate("Ranking",{usuario:usuario})}> 
                     <Image style={styles.gameModeImage} source={require("../assets/images/ranking.png")}/>
-                    <Text>Ver ranking </Text>
-                    <Text>Ver el ranking de los mejores jugadores</Text>
+                    <Text style={styles.titulo} >Ver ranking </Text>
+                    <Text style={styles.textoDesc}>Ver el ranking de los mejores jugadores</Text>
                 </TouchableOpacity>
             </View>
         </View>

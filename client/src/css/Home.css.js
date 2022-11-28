@@ -3,12 +3,13 @@ export const style ={
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#0c0c0c",
 
     },
     container2: {
         //view inside view
         flex: 1,
-        backgroundColor: "blue",
+        backgroundColor: "#191919",
         alignItems: "center",
         //justifyContent: "center",
         flexDirection: "column",
@@ -18,7 +19,7 @@ export const style ={
     },
     container3: {
         flex: 1,
-        backgroundColor: "green",
+        backgroundColor: "#191919",
         alignItems: "center",
         justifyContent: "center",
         width:'35vw',
@@ -27,12 +28,12 @@ export const style ={
     
 
     logo: {
-        backgroundColor: "red",
-        width: '20vw',
-        height: '15vh',
+        width: '30vw',
+        height: '20vh',
         margin: '10vh',
         justifyContent: "center",
         alignItems: "center",
+        resizeMode: "contain",
     },
     textoLogo: {
         color: "#ffffff",
@@ -45,10 +46,12 @@ export const style ={
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
+        fontSize: 20,
+        
         
     },
     botonIngresar: {
-        backgroundColor: "#ffffff",
+        backgroundColor: "#ff002e",
         width: '30vw',
         height: '5vh',
         borderRadius: 10,

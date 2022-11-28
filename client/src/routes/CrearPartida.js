@@ -58,27 +58,7 @@ function CrearPartida(props) {
         });
     }, []);
 
-    /*constructor(props) {
-        super(props);
-        this.state = {
-            usuario: props.route.params.usuario,
-            sala: "",
-            modo:"Vs",
-            pista:"Pista 1",
-            vueltas: 3,
-            tiempo: 0,
-            jugadores: 2
 
-        };
-    }
-
-    componentDidMount(){
-        this.setState({sala:this.makeid(5)});
-    }   */
-
-    
-
-    
     const partidaFromJson = (json) => {
         let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
         partida.setCreador(json.creador);
@@ -134,10 +114,10 @@ function CrearPartida(props) {
    
         return(
             <View style={styles.container}>
-                <Text>Sala: {sala}</Text>
+                <Text style={styles.titulo}>Sala: {sala}</Text>
                 <View style={styles.container2}>
-                <Text>Modo de juego</Text>
-                <View style={[styles.rowContainer,{gap:'1%'}]}>
+                <Text style={styles.subtitulo}>Modo de juego</Text>
+                <View style={[styles.rowContainer,{gap:'1%', marginVertical:'3vh'}]}>
                     <TouchableOpacity 
                         style={modo === "Vs" ? [styles.seleccionado, styles.botonModo] : [styles.noSeleccionado, styles.botonModo]}
                         onPress={()=>setModo("Vs")}>
@@ -149,8 +129,8 @@ function CrearPartida(props) {
                         <Text style={modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
                     </TouchableOpacity>
                 </View>
-                <Text>Seleccionar pista</Text>
-                <View style={[styles.rowContainer,{gap:'1%'}]}>
+                <Text style={styles.subtitulo}>Seleccionar pista</Text>
+                <View style={[styles.rowContainer,{gap:'1%', marginVertical:'3vh'}]}>
                     <TouchableOpacity
                         style={pista === "Pista 1" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
                         onPress={()=>{console.log("Pista 1"); setPista("Pista 1") }}>
@@ -169,7 +149,7 @@ function CrearPartida(props) {
                 </View>
                 <View style={styles.rowContainer}>
                     <View style={styles.containerVariantes} >
-                        <Text>Vueltas</Text>
+                    <Text style={{color: "#ffffff",fontSize: 20,backgroundColor: '#191919', marginRight:'1vw'}}>Vueltas</Text>
                         <input 
                             type="number" 
                             min="3"
@@ -178,7 +158,7 @@ function CrearPartida(props) {
                         />
                     </View>
                     <View style={styles.containerVariantes} >
-                        <Text style={{marginHorizontal:'2%'}} >Jugadores</Text>
+                        <Text style={{color: "#ffffff",fontSize: 20,backgroundColor: '#191919',marginHorizontal:'2%'}} >Jugadores</Text>
                         <input
                             type="number"
                             min="2"
@@ -188,7 +168,7 @@ function CrearPartida(props) {
                     </View>
                     {modo === "Contrareloj" ?
                     <View style={styles.containerVariantes} >
-                        <Text style={{marginLeft:'2%'}}>Tiempo</Text>
+                        <Text style={{color: "#ffffff",fontSize: 20,backgroundColor: '#191919',marginLeft:'2%',marginRight:'1vw'}}>Tiempo</Text>
                         <input
                             type="number"
                             min="30"
@@ -199,7 +179,11 @@ function CrearPartida(props) {
                     :null}
                 </View>
 
-                    <button onClick={() => CrearPartida()}>Crear partida</button>
+                    <TouchableOpacity style={styles.botonCrear} onClick={() => CrearPartida()}>
+                        <Text style={{color:'white', fontSize:20}} >
+                            Crear partida
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );

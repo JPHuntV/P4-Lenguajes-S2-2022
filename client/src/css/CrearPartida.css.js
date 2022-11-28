@@ -1,127 +1,62 @@
 export const style ={
     container: {
         flex: 1,
-        backgroundColor: 'lightblue',
+        backgroundColor: '#0c0c0c',
         alignItems: 'center',
-        justifyContent: 'center',
-        //flexDirection: "row"
+        justifyContent: 'center'
     },
 
     container2: {
-        backgroundColor: 'skyblue',
+        backgroundColor: '#191919',
         flexDirection: "column",
         marginHorizontal: '2vw',
         height: "85%",
         width: "55%",
         alignItems: 'center',
+        borderRadius: 10,
+        padding: '4vh',
     },
     rowContainer: {
-        //flex: 1,
         flexDirection: "row",
-        //alignItems: "center",
         justifyContent: "center",
-        //backgroundColor: "blue",
         width: "100%",
-        //height: "80vh",
-        marginTop: '1vh',
-        borderWidth: 1,
-        borderColor: 'black',
+        marginTop: '2vh',
 
         paddingTop: '2vh',
         paddingBottom: '2vh',
     },
-    containerColores: {
-        backgroundColor: 'red',
-        flexDirection: "column",
-        marginHorizontal: '2vw',
-        height: "100%",
-        width: "55%",
-        alignItems: 'center',
-    },
-    listaColores: {
-        flex:1,
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: "2vw",
-        padding: "2vw",
-        backgroundColor: "orange",
-        width: "100%",
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    containerJugadores: {
-        backgroundColor: 'red',
-        flexDirection: "column",
-        marginHorizontal: '2vw',
-        height: "100%",
-        width: "25%",
-        alignItems: 'center',
-    },
-    jugadoresScroll: {
-        backgroundColor: 'orange',
-        width: "100%",
-        flexWrap: "wrap",
-        paddingVertical: '1vh',
-    },
-    colorCard: {
-        //width: 250,
-        minWidth: '3vw',
-        flex: '0 0 18%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: "row",
-        height: '4vw',
-        borderRadius: 100,
-        margin: 2,
-    },
-    tarjetaJugador: {
-        backgroundColor: "white",
-        alignContent: "center",
-        flexDirection: "row",
-        //justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 10,
-        marginVertical: 10,
-        marginHorizontal: 15,
-        paddingHorizontal: 15,
-        height: '8vh',
-    },
-    selectorColores: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "center",
-    }, 
 
-    botonInicio: {
-        backgroundColor: "green",
-        width: "40vh",
-        height: "5vh",
+    botonCrear: {
+        backgroundColor: "#ff002e",
+        width: '30vw',
+        height: '5vh',
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: '6vh',
+   
     },
     seleccionado:{
-        backgroundColor: "blue",
+        borderWidth: 2,
+        borderColor: "#ff002e",
+        backgroundColor: "#212121",
         color: "white"
     },
     noSeleccionado:{
-        backgroundColor: "green",
+        backgroundColor: "#212121",
+
+        color: "white"
     },
     botonPista: {
-        //backgroundColor: "green",
         width: "31%",
-        height: "5vh",
-        //marginHorizontal: "1%",
+        height: "7vh",
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
     },
     botonModo: {
-        //backgroundColor: "green",
         width: "47%",
-        height: "5vh",
-       // marginHorizontal: "1%",
+        height: "7vh",
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
@@ -132,13 +67,32 @@ export const style ={
         height: "4vh",
         borderRadius: 10,
         justifyContent: "center",
+        fontSize: 20,
+        textAlign: "center",
 
     },
     containerVariantes: {
         width:'33%', 
         flexDirection:'row', 
-        alignItems:'center'
+        alignItems:'center',
+        marginVertical: '3vh',
+    },
+    titulo: {
+        color: "#ffffff",
+        fontSize: 30,
+        width: '55%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        marginVertical: '1vh',
+    },
+    subtitulo: {
+        color: "#ffffff",
+        fontSize: 20,
+        width: '100%',
+        backgroundColor: '#191919',
     }
+
 
 
 

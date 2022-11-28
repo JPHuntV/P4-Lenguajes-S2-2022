@@ -30,6 +30,15 @@ export default class StackNav extends Component{
                 screenOptions={{
                     animationEnabled: true,
                     animationTypeForReplace: 'push',
+                    headerStyle: {
+                        backgroundColor: '#191919',  
+                    },
+                    headerTitleStyle: {
+                        color: '#ffffff',
+                        fontSize: 26,
+                        fontWeight: 'bold',
+                    },
+                    headerTintColor: '#ffffff',
                 }
                 }
             > 
@@ -49,7 +58,12 @@ export default class StackNav extends Component{
                     options={{
                         title: 'Menú principal',
                     }} />
-                <Stack.Screen name="CrearPartida" component={CrearPartida} />
+                <Stack.Screen 
+                    name="CrearPartida" 
+                    component={CrearPartida} 
+                    options={{
+                        title:'Crear partida'
+                    }}/>
                 <Stack.Screen name="Lobby" component={Lobby} />
                 <Stack.Screen 
                     name="ListaPartidas" 
