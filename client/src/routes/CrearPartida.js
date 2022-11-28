@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { io, Socket } from "socket.io-client";
 import Partida from "../clases/Partida";
+import * as stylesTemp from "../css/CrearPartida.css.js";
+const styles = stylesTemp.style;
 
 function CrearPartida(props) {
 
@@ -131,66 +133,80 @@ function CrearPartida(props) {
 
    
         return(
-            <View>
-                <Text>Crear partida</Text>
+            <View style={styles.container}>
                 <Text>Sala: {sala}</Text>
-                <Text>Seleccionar modo de juego: {modo}</Text>
-                <TouchableOpacity 
-                    style={modo === "Vs" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
-                    onPress={()=>setModo("Vs")}>
-                    <Text style={modo ==="Vs" ? {color:"white"}:{color:"black"} }>Vs</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={modo === "Contrareloj" ? styles.modoSeleccionado : styles.modoNoSeleccionado}
-                    onPress={()=>{console.log("Contrareloj"); setModo("Contrareloj") }}>
-                    <Text style={modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
-                </TouchableOpacity>
+                <View style={styles.container2}>
+                <Text>Modo de juego</Text>
+                <View style={[styles.rowContainer,{gap:'1%'}]}>
+                    <TouchableOpacity 
+                        style={modo === "Vs" ? [styles.seleccionado, styles.botonModo] : [styles.noSeleccionado, styles.botonModo]}
+                        onPress={()=>setModo("Vs")}>
+                        <Text style={modo ==="Vs" ? {color:"white"}:{color:"black"} }>Vs</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={modo === "Contrareloj" ? [styles.seleccionado, styles.botonModo] : [styles.noSeleccionado, styles.botonModo]}
+                        onPress={()=>{console.log("Contrareloj"); setModo("Contrareloj") }}>
+                        <Text style={modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
+                    </TouchableOpacity>
+                </View>
                 <Text>Seleccionar pista</Text>
-                <TouchableOpacity
-                    style={pista === "Pista 1" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 1"); setPista("Pista 1") }}>
-                    <Text style={pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Pista 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={pista === "Pista 2" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 2"); setPista("Pista 2") }}>
-                    <Text style={pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Pista 2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={pista === "Pista 3" ? styles.pistaSeleccionada : styles.pistaNoSeleccionada}
-                    onPress={()=>{console.log("Pista 3"); setPista("Pista 3") }}>
-                    <Text style={pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Pista 3</Text>
-                </TouchableOpacity>
-                <Text>Numero de vueltas</Text>
-                <input 
-                    type="number" 
-                    min="3"
-                    value={vueltas} onChange={(e)=>{setVueltas(e.target.value)}}
-                ></input>
-                <Text>Numero de jugadores</Text>
-                <input
-                    type="number"
-                    min="2"
-                    value={jugadores} onChange={(e)=>{setJugadores(e.target.value)}}
-                ></input>
-                {modo === "Contrareloj" ?
-                    <view>
+                <View style={[styles.rowContainer,{gap:'1%'}]}>
+                    <TouchableOpacity
+                        style={pista === "Pista 1" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
+                        onPress={()=>{console.log("Pista 1"); setPista("Pista 1") }}>
+                        <Text style={pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Pista 1</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={pista === "Pista 2" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
+                        onPress={()=>{console.log("Pista 2"); setPista("Pista 2") }}>
+                        <Text style={pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Pista 2</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={pista === "Pista 3" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
+                        onPress={()=>{console.log("Pista 3"); setPista("Pista 3") }}>
+                        <Text style={pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Pista 3</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.rowContainer}>
+                    <View style={styles.containerVariantes} >
+                        <Text>Vueltas</Text>
+                        <input 
+                            type="number" 
+                            min="3"
+                            value={vueltas} onChange={(e)=>{setVueltas(e.target.value)}}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View style={styles.containerVariantes} >
+                        <Text style={{marginHorizontal:'2%'}} >Jugadores</Text>
+                        <input
+                            type="number"
+                            min="2"
+                            value={jugadores} onChange={(e)=>{setJugadores(e.target.value)}}
+                            style={styles.input}
+                        />
+                    </View>
+                    {modo === "Contrareloj" ?
+                    <View style={styles.containerVariantes} >
+                        <Text style={{marginLeft:'2%'}}>Tiempo</Text>
+                        <input
+                            type="number"
+                            min="30"
+                            value={tiempo} onChange={(e)=>{setTiempo(e.target.value)}}
+                            style={styles.input}
+                        />
+                    </View>
+                    :null}
+                </View>
 
-                    <text>Tiempo</text>
-                    <input
-                        type="number"
-                        min="30"
-                        value={tiempo} onChange={(e)=>{setTiempo(e.target.value)}}
-                        ></input>
-                    </view>
-                :null}
-                <button onClick={() => CrearPartida()}>Crear partida</button>
+                    <button onClick={() => CrearPartida()}>Crear partida</button>
+                </View>
             </View>
         );
     
 } export default CrearPartida;
 
-
+/*
 const styles = StyleSheet.create({
     modoSeleccionado:{
         backgroundColor: "blue",
@@ -206,4 +222,4 @@ const styles = StyleSheet.create({
     pistaNoSeleccionada:{
         backgroundColor: "white",
     }
-});
+});*/
