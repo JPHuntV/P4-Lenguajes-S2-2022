@@ -93,16 +93,6 @@ io.on("connection", (socket) => {
         partida.jugadores = jugadores;  
         partida.estado = "activa";
         actualizarPartida(partida);
-        //cambiar elemento de partida en partidasCreadas
-       /* for(let i = 0; i < partidasCreadas.length; i++){
-            let partidaTemp = JSON.parse(partidasCreadas[i].partida).state;
-            console.log(partidaTemp);
-            if(partidaTemp.codigo === partida.codigo){
-                partidasCreadas[i].partida = JSON.stringify({state: partida});
-                io.to(partida.codigo).emit("actualizarPartida", partida);
-            }
-        }*/
-
         console.log(partidasCreadas);
     }
 
@@ -169,8 +159,7 @@ io.on("connection", (socket) => {
                     tablero[x2][y2] = jugador;
                     
                     console.log(partida.vueltas)
-                    //if(jugador[3].vueltasCompletas === partida.vueltas){
-                    if(jugador[3].vueltasCompletas === 0){
+                    if(jugador[3].vueltasCompletas === partida.vueltas){
                         console.log("vueltas completas");
                         partida.posiciones.push(jugador);
                         console.log(partida.posiciones);
@@ -398,15 +387,6 @@ io.on("connection", (socket) => {
             socket.emit("ranking", ranking);
         });
     });
-
-
-
- 
-/*a) Nombre del ganador
-b) Tiempo
-c) Pista
-d) Vueltas
-e) Identificador de partida*/
 
 
 

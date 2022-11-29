@@ -7,37 +7,17 @@ import * as stylesTemp from "../css/Juego.css.js";
 const styles = stylesTemp.style;
 
 function Juego(props){
-/*
-    const pista = require('../pistas/'++'.csv');
 
-    const getMatrixTablero = () => {
-        let matriz=[];
-        fetch(pista)
-        .then(response => response.text())
-        .then(text => {
-            let lista = text.split("\r\n");
-            lista.pop();
-            lista.forEach(fila => {
-                let filaMatriz = fila.split(",");
-                matriz.push(filaMatriz);
-            });
-        })
-        .catch(error => console.log(error));
-        console.log("me llamaron");
-        console.log(matriz);
-        return matriz;
-    }
-*/
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
     const [forsarRender, setForsarRender] = useState(false);
     const [tablero, setTablero] = useState(null);
     const [sentidoCorrecto, setSentido] = useState(true);
-    const [tiempo, setTiempo] = useState(5);
+    const [tempo, setTempo] = useState("aa");
     const [counter, setCounter] = useState(null);
 
-    const Temp = 1000;
+    const Temp = 500;
     useEffect(() => {
         console.log("useEffectjuego");
         console.log(partida.getEstado());
@@ -46,13 +26,18 @@ function Juego(props){
             if(event.repeat) return;
             if((event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight") && partida.getEstado() === "activa"){
                 console.log(usuario.getFicha().vueltasCompletas);
-                if(0 >  usuario.getFicha().vueltasCompletas){
+                if(partida.getVueltas() >  usuario.getFicha().vueltasCompletas){
                     console.log(event.key);
                     let direcciones = {"ArrowUp":"w", "ArrowDown":"s", "ArrowLeft":"a", "ArrowRight":"d"};
                     usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: direcciones[event.key]});
                 }
             }else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
                 console.log('u');
+                
+                test();
+                
+      
+          
                 partida.setEstado("activa");
 
                 usuario.getSocket().emit("iniciarJuego", partida);
@@ -62,7 +47,7 @@ function Juego(props){
             console.log("interval");
             setForsarRender(!forsarRender);
             clearInterval(interval);
-        },100);
+        },Temp);
         
 
         document.addEventListener("keydown", handleKeyDown);
@@ -70,6 +55,7 @@ function Juego(props){
         //render tablero cuando se carga la pagina
 
         usuario.getSocket().on("iniciarJuego", (data) => {
+            
             partida.setEstado("activa");
             console.log("iniciarJuego");
             setTablero(generarTablero());
@@ -129,7 +115,18 @@ function Juego(props){
         };
     }, []);
 
-
+    function test() {
+        setTempo("1");
+        setTimeout(() => {
+            setTempo("2");
+            setTimeout(() => {
+                setTempo("3");
+                setTimeout(() => {
+                    setTempo("");
+                }, 1000);
+            }, 1000);
+        }, 1000);
+    }
 
     const partidaFromJson = (json) => {
         let partida = new Partida(json.codigo, json.modo, json.pista, json.vueltas, json.tiempo, json.cantJugadores);
@@ -232,8 +229,11 @@ function Juego(props){
                     <View style={styles.tablero}>
                         {generarTablero()}
                     </View>
+                    <Text id="#sentIncorrecto" style={{color:'#ff002e',position: 'absolute', fontSize:30,fontWeight:'bold'}}>{tempo}</Text>
+
+                    
                     {!sentidoCorrecto ?
-                        <Text style={{color:'white',position: 'absolute'}}>Sentido incorrecto</Text>
+                        <Text style={{color:'#ff002e',position: 'absolute', fontSize:30,fontWeight:'bold'}}>Sentido incorrecto</Text>
                         :null
                     }
                 </View>
