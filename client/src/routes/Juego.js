@@ -62,7 +62,7 @@ function Juego(props){
             console.log("interval");
             setForsarRender(!forsarRender);
             clearInterval(interval);
-        },10);
+        },100);
         
 
         document.addEventListener("keydown", handleKeyDown);
@@ -141,30 +141,20 @@ function Juego(props){
         partida.setPosiciones(json.posiciones);
         return partida;
     }
-/*
-    const getItemsJugadores = () => {
-        console.log("getItemsJugadores");
-        //console.log(jugadores);
-        let jugadores = partida.getJugadores();
-        let itemsJugadores = [];
-        jugadores.forEach(jugador => {
-            itemsJugadores.push(
-                <View key={jugador[1]}>
-                    <Text>{jugador.toString()}</Text>
-                </View>
 
-            );
-        });
-        return itemsJugadores;
-    }*/
 
     const getItemsJugadores = () => {
         console.log("getItemsJugadores");
         //console.log(partida.getJugadores());
         let itemsJugadores = [];
         partida.getJugadores().forEach(jugador => {
+            let borde = {};
+            if(usuario.getSocket().id === jugador[1]){
+                borde = {borderWidth :3, borderColor : "red"};
+            }
+            
             itemsJugadores.push(
-                <View key={jugador[1]} style={styles.tarjetaJugador} >
+                <View key={jugador[1]} style={[styles.tarjetaJugador, borde ]} >
                     <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 35, height: 35, borderRadius: 50, margin:5}}></TouchableOpacity>
                     <Text style={{fontSize:20, marginLeft:10}} >{jugador[0]}</Text>
                 </View>
@@ -203,7 +193,7 @@ function Juego(props){
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
                         {typeof(partida.getTablero()[i][j]) === "object" ?
-                            <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color}]}>
+                            <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color, borderWidth:1, borderColor:'#ffffff'}]}>
                                 <Text>{/*partida.getTablero()[i][j][0]*/}</Text>
                             </TouchableOpacity>
                             :
@@ -229,10 +219,10 @@ function Juego(props){
 
     return(
         <View style={styles.container}>
-            <Text>{partida.getCodigo()}</Text>
+            <Text style={{fontSize:25,  fontWeight:'bold', color:'white'}}>Sala: {partida.getCodigo()}</Text>
             <View style={styles.rowContainer}>
                 <View style={styles.containerJugadores}>
-                    <Text style={{fontSize:20, marginVertical:5}} >Jugadores: {partida.getJugadores().length}</Text>
+                    <Text style={{fontSize:20, marginVertical:5, fontWeight:'bold', color:'white'}} >Jugadores: {partida.getJugadores().length}</Text>
                     <ScrollView style={styles.jugadoresScroll}>
                         {getItemsJugadores()}   
                     </ScrollView>
