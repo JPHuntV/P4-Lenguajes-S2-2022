@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity , Image} from "react-native";
 import Partida from "../clases/Partida";
 //import Tablero from "./Tablero";
 //var reader = require('any-text');
@@ -7,8 +7,8 @@ import * as stylesTemp from "../css/Juego.css.js";
 const styles = stylesTemp.style;
 
 function Juego(props){
-
-    const pista = require('../pistas/pista1.csv');
+/*
+    const pista = require('../pistas/'++'.csv');
 
     const getMatrixTablero = () => {
         let matriz=[];
@@ -27,7 +27,7 @@ function Juego(props){
         console.log(matriz);
         return matriz;
     }
-
+*/
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partida, setPartida] = useState(props.route.params.partida);
@@ -192,12 +192,15 @@ function Juego(props){
                 }
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
+                        <Image source={require('../assets/images/'+partida.getPista()+'/'+celda[0]+'.png')} style={styles.imagenCelda} />
                         {typeof(partida.getTablero()[i][j]) === "object" ?
+
                             <TouchableOpacity style={[styles.celdaFicha, {backgroundColor:partida.getTablero()[i][j][3].color, borderWidth:1, borderColor:'#ffffff'}]}>
                                 <Text>{/*partida.getTablero()[i][j][0]*/}</Text>
+
                             </TouchableOpacity>
                             :
-                            <Text>{/*celda*/}</Text>
+                            null
                         }      
                     </TouchableOpacity>
                 );
@@ -214,8 +217,6 @@ function Juego(props){
         return tablero;
     }
 
-
-    
 
     return(
         <View style={styles.container}>

@@ -98,7 +98,7 @@ function Lobby(props) {
     }
 
 
-    const pista = require('../pistas/pista1.csv');
+    const pista = require('../pistas/'+partida.getPista()+'.csv');
     const getMatrixTablero = () => {
         let matriz=[];
         fetch(pista)

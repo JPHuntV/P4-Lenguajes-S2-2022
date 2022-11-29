@@ -30,7 +30,7 @@ function Ranking(props) {
                     <View style={styles.itemRanking} key={i}>
                         <Text style={styles.textoRanking}>{element[0]}</Text>
                         <Text style={styles.textoRanking}>{element[1]}</Text>
-                        <Text style={styles.textoRanking}>{element[2]}</Text>
+                        <Text style={styles.textoRanking}>{element[2] === "Pista 1" ? "Nascar" : element[2] === "Pista 2" ? "Caminos desiertos" : element[2] === "Pista 3" ? "Senda nevada" : ''}</Text>
                         <Text style={styles.textoRanking}>{element[3]}</Text>
                         <Text style={styles.textoRanking}>{element[4]}</Text>
                     </View>

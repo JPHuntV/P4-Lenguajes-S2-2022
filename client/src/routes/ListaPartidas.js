@@ -79,7 +79,7 @@ function ListaPartidas(props){
                             <TestTablero partida={partida}/>
                         </View>
                         <View style={styles.gameInfo}>
-                            <Text style={styles.text}>{partida.getPista()}</Text>
+                            <Text style={styles.text}>{partida.getPista() === "Pista 1" ? "Nascar" : partida.getPista() === "Pista 2" ? "Caminos desiertos" : partida.getPista() === "Pista 3" ? "Senda nevada" : ''}</Text>
                             <Text  style={styles.text}>Modo: {partida.getModo()}</Text>
                             <Text  style={styles.text}>Vueltas: {partida.getVueltas()}</Text>
                             </View>

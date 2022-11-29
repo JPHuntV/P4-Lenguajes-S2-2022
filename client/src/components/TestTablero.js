@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Partida from "../clases/Partida";
 
 function TestTablero({partida}) {
 
     const getMatrixTablero = () => {
-            let pista = require('../pistas/pista1.csv');
+            let pista = require('../pistas/'+partida.getPista()+'.csv');
             let matriz=[];
             fetch(pista)
             .then(response => response.text())
@@ -36,6 +36,7 @@ function TestTablero({partida}) {
 
      
     const generarTablero = (matriz) =>{
+
         console.log("generarTablero");
         console.log(matriz);
         //let matriz = mat;   
@@ -60,8 +61,8 @@ function TestTablero({partida}) {
                     celda = celda[0];
                 }
                 filaTablero.push(
-                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
-                 
+                    <TouchableOpacity  key={i + "," + j}  style={[styles.celda]} disabled>        
+                        <Image source={require('../assets/images/'+partida.getPista()+'/'+celda[0]+'.png')} style={styles.imagenCelda} />
                     </TouchableOpacity>
                 );
                 j++;
@@ -93,17 +94,34 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "White",
+        width: "100%",
+        height: "4%",
     },
     celda: {
-        width: '0.8vh',
-        height: '0.8vh',
+        //borderWidth: 1,
+        borderColor: "black",
+        width: '4%',
+        height: '100%',
         justifyContent: "center",
         alignItems: "center",
         
     },
+    imagenCelda: {
+        width: '100%',
+        height: '100%',
+        position: "absolute",
+        resizeMode: "stretch",
+    },
+
     tablero: {
+        //borderWidth: 1,
+        borderColor: "black",
         justifyContent: "center",
         alignItems: "center",
-    }, 
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
 
 });

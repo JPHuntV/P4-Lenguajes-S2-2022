@@ -95,9 +95,9 @@ function CrearPartida(props) {
     }
     
     const getMatrixTablero = () => {
-        let pista = require('../pistas/pista1.csv');
+        let pistaStr = require('../pistas/'+pista+'.csv');
         let matriz=[];
-        fetch(pista)
+        fetch(pistaStr)
         .then(response => response.text())
         .then(text => {
             let lista = text.split("\r\n");
@@ -134,17 +134,17 @@ function CrearPartida(props) {
                     <TouchableOpacity
                         style={pista === "Pista 1" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
                         onPress={()=>{console.log("Pista 1"); setPista("Pista 1") }}>
-                        <Text style={pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Pista 1</Text>
+                        <Text style={pista ==="Pista 1" ? {color:"white"}:{color:"black"} }>Nascar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={pista === "Pista 2" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
                         onPress={()=>{console.log("Pista 2"); setPista("Pista 2") }}>
-                        <Text style={pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Pista 2</Text>
+                        <Text style={pista ==="Pista 2" ? {color:"white"}:{color:"black"} }>Caminos desiertos</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={pista === "Pista 3" ? [styles.seleccionado, styles.botonPista] : [styles.noSeleccionado, styles.botonPista]}
                         onPress={()=>{console.log("Pista 3"); setPista("Pista 3") }}>
-                        <Text style={pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Pista 3</Text>
+                        <Text style={pista ==="Pista 3" ? {color:"white"}:{color:"black"} }>Senda nevada</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.rowContainer}>

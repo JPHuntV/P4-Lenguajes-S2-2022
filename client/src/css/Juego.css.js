@@ -101,30 +101,42 @@ export const style ={
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "White",
+        width: "100%",
+        height: "4%",
     },
     celda: {
         //borderWidth: 1,
         borderColor: "black",
-        width: '4.25vh',
-        height: '3vh',
+        width: '4%',
+        height: '100%',
         justifyContent: "center",
         alignItems: "center",
         
     },
+    imagenCelda: {
+        width: '100%',
+        height: '100%',
+        position: "absolute",
+        resizeMode: "stretch",
+    },
+
     tablero: {
         //borderWidth: 1,
         borderColor: "black",
         justifyContent: "center",
         alignItems: "center",
         position: 'absolute',
+        width: '100%',
+        height: '100%',
     },
 
     //ficha circular
     celdaFicha: {
         //borderWidth: 1,
         borderColor: "black",
-        width: '3vh',
-        height: '3vh',
+        width: '55%',
+        aspectRatio: 1,
         justifyContent: "center",
         alignItems: "center",
         //backgroundColor: usuario.getFicha().color,
