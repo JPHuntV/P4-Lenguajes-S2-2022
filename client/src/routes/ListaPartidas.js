@@ -43,7 +43,7 @@ function ListaPartidas(props){
             console.log("interval");
             setForsarRender(!forsarRender);
             clearInterval(interval);
-        },100);
+        },1000);
 
     }, []);
     

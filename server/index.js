@@ -176,15 +176,10 @@ io.on("connection", (socket) => {
                         guardarPartidaRanking(partida);
                         io.to(partida.codigo).emit("finalizarPartida", partida);
                     }
-
-
-                        /*console.log("ganador");
-                        io.to(partida.codigo).emit("ganador", jugador);*/
                 
                 }
             }
         });
-        //console.log(partida);
       
 
     });
@@ -347,8 +342,6 @@ io.on("connection", (socket) => {
     guardarPartidaRanking = (partida) => {
         console.log("guardando partida");
         console.log(partida);
-        //let partida = data.state;
-        //let partida = JSON.parse(data.partida).state;
         //escribir en archivo txt
         let nuevaEntrada = partida.posiciones[0][0] +","+ (partida.modo ==="Vs" ? "----":partida.tiempo) + "," + partida.pista+","+partida.posiciones[0][3].vueltasCompletas+","+partida.codigo;
         fs.appendFile('./archivos/ranking.txt', nuevaEntrada + "\n", function (err) {
@@ -380,11 +373,11 @@ io.on("connection", (socket) => {
 
 
 }); 
-
+/*
 server.listen(3001,'localhost', () => {
     console.log('listening on *:3001');
 });
-
-/*server.listen(3001,'192.168.0.176', () => {
+*/
+server.listen(3001,'192.168.0.176', () => {
     console.log('listening on *:3001');
-});*/
+});
