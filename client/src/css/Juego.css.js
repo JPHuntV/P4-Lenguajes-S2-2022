@@ -30,7 +30,7 @@ export const style ={
         alignItems: 'center',
         borderWidth: 2,
         borderColor: '#ff002e',
-        borderRadius: 10,
+        
         
     },
     listaColores: {

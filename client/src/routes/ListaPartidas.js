@@ -9,7 +9,7 @@ function ListaPartidas(props){
     
     const [usuario, setUsuario] = useState(props.route.params.usuario);
     const [partidas, setPartidas] = useState(props.route.params.partidas);
-
+    const [forsarRender, setForsarRender] = useState(false);
     
     useEffect(() => {
         console.log("useEffect");
@@ -38,6 +38,13 @@ function ListaPartidas(props){
             console.log("notJoined");
             alert("No se pudo unir a la partida");
         });
+
+        const interval = setInterval(() => {
+            console.log("interval");
+            setForsarRender(!forsarRender);
+            clearInterval(interval);
+        },100);
+
     }, []);
     
 
@@ -72,13 +79,14 @@ function ListaPartidas(props){
                             <TestTablero partida={partida}/>
                         </View>
                         <View style={styles.gameInfo}>
-                            <Text >{partida.getPista()}</Text>
-                            <Text >{partida.getModo()}</Text>
-                            <Text >{partida.getVueltas()}</Text>
-                            {partida.getModo != "Vs" ? <Text >{partida.getTiempo()}</Text> : null}
-                            <Text>Jugadores conectados:{partida.getJugadores().length}</Text>
-                            <Text>Sala: {partida.getCodigo()}</Text>
-                            
+                            <Text style={styles.text}>{partida.getPista()}</Text>
+                            <Text  style={styles.text}>Modo: {partida.getModo()}</Text>
+                            <Text  style={styles.text}>Vueltas: {partida.getVueltas()}</Text>
+                            </View>
+                        <View style={styles.gameInfo}>
+                            {partida.getModo() !== "Vs" ? <Text  style={styles.text}>Tiempo: {partida.getTiempo()}</Text> : null}
+                            <Text style={styles.text}>Jugadores conectados: {partida.getJugadores().length}</Text>
+                            <Text style={styles.text}>Sala: {partida.getCodigo()}</Text>
                         </View>
                         </TouchableOpacity>
 
@@ -95,10 +103,9 @@ function ListaPartidas(props){
 
     return(
         <View style={styles.container}>
-            <Text>{usuario.getSocket().id }</Text>
             <View style={styles.head}>
                 <Image style={styles.imagenUsuario} source={require("../assets/images/usuario.png")}/>
-                <Text style={{fontSize:30}}>{usuario.getNickName()}</Text>
+                <Text style={{fontSize:30, color:"#ffffff", marginTop:'2vh' }}>{usuario.getNickName()}</Text>
             </View>
             <View style = {styles.gamesContainer}>
             {getItemsPartidas()}

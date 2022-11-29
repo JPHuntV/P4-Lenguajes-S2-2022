@@ -76,20 +76,20 @@ function Estadisticas(props) {
 
     return (
         <View style={styles.container}>
-            <Text>Partida finalizada</Text>
+            <Text style={{fontSize:25,  fontWeight:'bold', color:'white'}}>Partida finalizada</Text>
             <View style={styles.rowContainer}>
                 <View style={styles.containerJugadores}>
-                    <Text style={{fontSize:20, marginVertical:5}} >Posiciones</Text>
+                    <Text style={styles.text} >Posiciones</Text>
                     <ScrollView style={styles.jugadoresScroll}>
                     {getItemsPosiciones()}  
                     </ScrollView>
                 </View>
                 <View style={styles.containerColores}>
                     <View style= {styles.containerInfo}>
-                        <Text style={styles.text}>Codigo: {partida.getCodigo()}</Text>
+                        <Text style={styles.text}>Sala: {partida.getCodigo()}</Text>
                         <Text style={styles.text}>Modo: {partida.getModo()}</Text>
                         <Text style={styles.text}>Pista: {partida.getPista()}</Text> 
-                        <Text style={styles.text}>Pista: {partida.getPista()}</Text> 
+                        <Text style={styles.text}>Vueltas: {partida.getVueltas()}</Text> 
                     </View>
                     <View style={styles.tablero}>
                         {generarTablero()}

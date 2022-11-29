@@ -3,7 +3,7 @@ export const style ={
         flex: 1,
         alignItems: "center",
         //justifyContent: "center",
-        backgroundColor: "#ffff",
+        backgroundColor: "#0c0c0c",
 
     },
     gamesContainer: {
@@ -12,44 +12,53 @@ export const style ={
         flexWrap: "wrap",
         gap: "1vw",
         margin: "2vw",
-        backgroundColor: "red",
+        backgroundColor: "#0c0c0c",
         width: "99vw",
     },
 
     gameCard: {
-        backgroundColor: "red",
+        backgroundColor: "#191919",
         flex: '0 0 32.33%',
         flexDirection: "row",
         height: '20vh',
         minWidth: '32.33vw',
-        
+        borderRadius: 10,
+        paddingRight: '1vw',
+        alignItems: 'center',    
     },
     gameImage: {
         width: '20vh',
         height: '20vh',
-        backgroundColor: "blue",
+        backgroundColor: "#0c0c0c",
     },
     gameInfo: {
-        backgroundColor: "gray",
+        backgroundColor: "#191919",
         flex: 1,
         flexDirection: "column",
-        width: '100vh',
+        width: '50%',
     },
     imagenUsuario: {
         width: '5vw',
         height: '5vw',
         borderRadius: 100,
         borderWidth: 2,
-        borderColor: "#ff333f",
-        marginLeft: '2vw',
-        marginRight: '1vw',
+        borderColor: "#ffffff",
+        marginTop: '2vh',
+        marginLeft: '3vw',
+        marginRight: 'vw',
     },
     head: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#0c0c0c",
         width: "100%",
         marginVertical: '1vh',
     },
-  
+    text: {
+        color: "#ffffff",
+        fontSize: 16,
+        width: '100%',
+        paddingLeft: '1vw',
+        marginVertical: '1vh',
+    },
 }

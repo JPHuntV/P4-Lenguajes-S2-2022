@@ -1,7 +1,7 @@
 export const style ={
     container: {
         flex: 1,
-        backgroundColor: 'lightblue',
+        backgroundColor: '#0c0c0c',
         alignItems: 'center',
         justifyContent: 'center',
         //flexDirection: "row"
@@ -11,7 +11,7 @@ export const style ={
         flexDirection: "row",
         //alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#fff55f",
+        backgroundColor: "#0c0c0c",
         width: "100vw",
         height: "80vh",
         marginTop: '1vh',
@@ -20,27 +20,26 @@ export const style ={
         paddingBottom: '2vh',
     },
     containerColores: {
-        backgroundColor: 'red',
+        backgroundColor: '#191919',
         flexDirection: "column",
         marginHorizontal: '2vw',
         height: "100%",
         width: "55%",
         alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center',
-        
     },
 
     containerJugadores: {
-        backgroundColor: 'red',
+        backgroundColor: '#ff002e',
         flexDirection: "column",
         marginHorizontal: '2vw',
         height: "100%",
         width: "25%",
         alignItems: 'center',
+        borderRadius: 10,
     },
     jugadoresScroll: {
-        backgroundColor: 'orange',
+        backgroundColor: '#191919',
         width: "100%",
         flexWrap: "wrap",
         paddingVertical: '1vh',
@@ -48,7 +47,7 @@ export const style ={
    
    
     containerInfo: {
-        backgroundColor: 'blue',
+        backgroundColor: '#ff002e',
         flexDirection: "row",
         marginHorizontal: '2vw',
         width: "100%",
@@ -107,7 +106,7 @@ export const style ={
         
     },
     botonVolver: {
-        backgroundColor: "green",
+        backgroundColor: "#ff002e",
         width: "40vh",
         height: "5vh",
         borderRadius: 10,

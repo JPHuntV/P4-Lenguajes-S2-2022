@@ -14,3 +14,5 @@ hunt,----,Pista 1,0,ukips
 hunt,----,Pista 1,0,U8xnu
 hunt,----,Pista 1,0,XEsYp
 hunt,----,Pista 1,0,Pnx2g
+hunt,----,Pista 1,0,FjxzU
+jean,----,Pista 1,0,HcEN7

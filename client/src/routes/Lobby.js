@@ -197,7 +197,9 @@ function Lobby(props) {
                         <Text style={{fontSize:20, color:'white', fontWeight:'bold'}}  >Empezar partida</Text>
                     </TouchableOpacity>
                     :
-                    <Text style={styles.botonInicio}>Esperando al creador</Text>
+                    <TouchableOpacity style={styles.botonInicio} disabled >
+                        <Text style={{fontSize:20, color:'white', fontWeight:'bold'}} >Esperando al creador</Text>
+                    </TouchableOpacity>
                 }
         </View>
     );
