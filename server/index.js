@@ -373,11 +373,7 @@ io.on("connection", (socket) => {
 
 
 }); 
-/*
+
 server.listen(3001,'localhost', () => {
-    console.log('listening on *:3001');
-});
-*/
-server.listen(3001,'192.168.0.176', () => {
     console.log('listening on *:3001');
 });

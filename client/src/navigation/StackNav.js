@@ -11,8 +11,7 @@ import ListaPartidas from '../routes/ListaPartidas';
 import Juego from '../routes/Juego';
 import Estadisticas from '../routes/Estadisticas';
 import Ranking from '../routes/Ranking';
-//const socket = io.connect('http://localhost:3001');
-const socket = io.connect('http://152.231.203.141:8080');
+const socket = io.connect('http://localhost:3001');
 
 
 
