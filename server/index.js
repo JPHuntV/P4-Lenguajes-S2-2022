@@ -77,8 +77,9 @@ io.on("connection", (socket) => {
         let jugadores = partida.jugadores;
         let tablero = partida.tablero;
         let contador = 0;
-        for(let i = 0; i < tablero.length; i++){
+        for(let i = tablero.length-1; i >0; i--){
             for(let j = 0; j < tablero[i].length; j++){
+                let random =  Math.random() < 0.5;
                 if(tablero[i][j][0] === "3" && contador < jugadores.length){
                     console.log("jugador: "+jugadores[contador][3]);
                     tablero[i][j] = jugadores[contador];

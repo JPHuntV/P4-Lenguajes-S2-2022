@@ -35,7 +35,7 @@ function PantallaSeleccion(props){
                     style={styles.gameModeCard}
                     onPress={()=> irAPartida()}> 
                     <Image style={styles.gameModeImage} source={require("../assets/images/unirsePartida.png")}/>
-                    <Text style={styles.titulo} >Unirser a partida</Text>
+                    <Text style={styles.titulo} >Unirse a partida</Text>
                     <Text style={styles.textoDesc}>Unete a una partida ya existente y compite contra hasta 11 jugadores</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 

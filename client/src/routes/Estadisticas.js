@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import Partida from "../clases/Partida";
 import * as stylesTemp from "../css/Estadisticas.css.js";
 const styles = stylesTemp.style;
@@ -51,6 +51,7 @@ function Estadisticas(props) {
                 }
                 filaTablero.push(
                     <TouchableOpacity  key={i + "," + j}  style={[styles.celda,{backgroundColor:colorCelda}]} disabled>        
+                        <Image source={require('../assets/images/'+partida.getPista()+'/'+celda[0]+'.png')} style={styles.imagenCelda} />
 
                     </TouchableOpacity>
                 );

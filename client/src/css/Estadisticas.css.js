@@ -26,7 +26,7 @@ export const style ={
         height: "100%",
         width: "55%",
         alignItems: 'center',
-        justifyContent: 'center',
+        //justifyContent: 'center',
     },
 
     containerJugadores: {
@@ -73,21 +73,34 @@ export const style ={
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "White",
+        width: "100%",
+        height: "4%",
     },
     celda: {
         //borderWidth: 1,
         borderColor: "black",
-        width: '4.25vh',
-        height: '3vh',
+        width: '4%',
+        height: '100%',
         justifyContent: "center",
         alignItems: "center",
         
     },
+    imagenCelda: {
+        width: '100%',
+        height: '100%',
+        position: "absolute",
+        resizeMode: "stretch",
+    },
+
     tablero: {
         //borderWidth: 1,
         borderColor: "black",
         justifyContent: "center",
         alignItems: "center",
+        width: '100%',
+        height: '96%',
+        marginTop: 'auto',
     },
 
     text: {

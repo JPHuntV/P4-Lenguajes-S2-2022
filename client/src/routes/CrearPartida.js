@@ -71,6 +71,8 @@ function CrearPartida(props) {
     const CrearPartida = () => {
         console.log("estoy en CrearPartida");
         usuario.setTipo("Creador");
+        if(jugadores <2) setJugadores(2);
+        if(jugadores >12) setJugadores(12);
         let partida;
         partida = new Partida(sala,modo,pista,vueltas,tiempo,jugadores);
         partida.setCreador(usuario.toJson());
@@ -162,7 +164,8 @@ function CrearPartida(props) {
                         <input
                             type="number"
                             min="2"
-                            value={jugadores} onChange={(e)=>{setJugadores(e.target.value)}}
+                            max="12"
+                            value={jugadores} onChange={(e)=>{  setJugadores(e.target.value)}}
                             style={styles.input}
                         />
                     </View>
@@ -190,20 +193,3 @@ function CrearPartida(props) {
     
 } export default CrearPartida;
 
-/*
-const styles = StyleSheet.create({
-    modoSeleccionado:{
-        backgroundColor: "blue",
-        color: "white"
-    },
-    modoNoSeleccionado:{
-        backgroundColor: "white",
-    },
-    pistaSeleccionada:{
-        backgroundColor: "blue",
-        color: "white"
-    },
-    pistaNoSeleccionada:{
-        backgroundColor: "white",
-    }
-});*/

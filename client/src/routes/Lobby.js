@@ -182,7 +182,8 @@ function Lobby(props) {
                 <View style={styles.containerJugadores}>
                     <Text style={{fontSize:20, marginVertical:5, fontWeight:'bold', color:'white'}} >Jugadores: {partida.getJugadores().length}</Text>
                     <ScrollView style={styles.jugadoresScroll}>
-                        {getItemsJugadores()}   
+                        {getItemsJugadores()}
+                        {partida.getJugadores().length < 2 && <Text style={{fontSize:20, marginVertical:20, width:'100%', textAlign:'center', fontWeight:'bold', color:'white'}} >Esperando jugadores...</Text>}
                     </ScrollView>
                 </View>
                 <View style={styles.containerColores}>
@@ -193,7 +194,7 @@ function Lobby(props) {
                 </View>
             </View>
                 {(usuario.getTipo() == "Creador") ?
-                    <TouchableOpacity onPress={()=> iniciarPartida()} style={styles.botonInicio} >
+                    <TouchableOpacity onPress={()=> iniciarPartida()} style={styles.botonInicio} disabled={partida.getJugadores().length < 2}  >
                         <Text style={{fontSize:20, color:'white', fontWeight:'bold'}}  >Empezar partida</Text>
                     </TouchableOpacity>
                     :

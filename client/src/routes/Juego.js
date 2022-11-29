@@ -14,7 +14,7 @@ function Juego(props){
     const [forsarRender, setForsarRender] = useState(false);
     const [tablero, setTablero] = useState(null);
     const [sentidoCorrecto, setSentido] = useState(true);
-    const [tempo, setTempo] = useState("aa");
+    const [tempo, setTempo] = useState("");
     const [counter, setCounter] = useState(null);
 
     const Temp = 500;
@@ -31,10 +31,10 @@ function Juego(props){
                     let direcciones = {"ArrowUp":"w", "ArrowDown":"s", "ArrowLeft":"a", "ArrowRight":"d"};
                     usuario.getSocket().emit("mover", {partida: partida.getCodigo(), direccion: direcciones[event.key]});
                 }
-            }else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U') ){
+            }else if (usuario.getTipo()=="Creador" && (event.key === 'u' || event.key === 'U')  && partida.getEstado() === "esperando"){
                 console.log('u');
-                
                 test();
+                
                 
       
           
@@ -55,10 +55,10 @@ function Juego(props){
         //render tablero cuando se carga la pagina
 
         usuario.getSocket().on("iniciarJuego", (data) => {
-            
             partida.setEstado("activa");
             console.log("iniciarJuego");
             setTablero(generarTablero());
+            test();
         });
 
         usuario.getSocket().on("ubicarJugador", (data) => {
@@ -154,6 +154,7 @@ function Juego(props){
                 <View key={jugador[1]} style={[styles.tarjetaJugador, borde ]} >
                     <TouchableOpacity disabled style={{backgroundColor: jugador[3].color, width: 35, height: 35, borderRadius: 50, margin:5}}></TouchableOpacity>
                     <Text style={{fontSize:20, marginLeft:10}} >{jugador[0]}</Text>
+                    <Text style={{fontSize:20, width:'100%', textAlign:'right' }}>{jugador[3].vueltasCompletas >-1 ? jugador[3].vueltasCompletas : 0}/{partida.getVueltas()}</Text>
                 </View>
 
             );
