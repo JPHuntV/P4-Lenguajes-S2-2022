@@ -126,8 +126,8 @@ function CrearPartida(props) {
                         <Text style={modo ==="Vs" ? {color:"white"}:{color:"black"} }>Vs</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        style={modo === "Contrareloj" ? [styles.seleccionado, styles.botonModo] : [styles.noSeleccionado, styles.botonModo]}
-                        onPress={()=>{console.log("Contrareloj"); setModo("Contrareloj") }}>
+                        style={modo === "Contrareloj" ? [styles.seleccionado, styles.botonModo] : [styles.noSeleccionado, styles.botonModo] }
+                        onPress={()=>{console.log("Contrareloj"); setModo("Contrareloj") }} disabled>
                         <Text style={modo ==="Contrareloj" ? {color:"white"}:{color:"black"} }>Contrareloj</Text>
                     </TouchableOpacity>
                 </View>

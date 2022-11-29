@@ -267,21 +267,6 @@ io.on("connection", (socket) => {
 
 
 
-    function getMatrixTablero (){
-                let matriz = [];
-                fs.readFile('./pistas/pista1.csv', 'utf8', function(err, data) {
-                    if (err) throw err;
-                    console.log(data);
-                    data = data.split("\r\n");
-                    data.pop();
-                    data.forEach(fila => {
-                        let filaMatriz = fila.split(",");
-                        matriz.push(filaMatriz);
-                    });
-            
-                });
-                return matriz;
-    }
 
     socket.on("crearPartida", (data) => {
         console.log("creando partida");
